@@ -1,0 +1,11 @@
+{
+  "name": "dev-onboarding",
+  "version": "0.1.0-alpha",
+  "description": "Dev prostředí onboarding po WSL setupu — SSH klíč (GitLab/GitHub), git konfigurace, GitHub/GitLab CLI, vysvětlení Claude konceptů (memory vs CLAUDE.md vs skills), registrace Slevomat privátního marketplace. Skeleton — skills budou doplněny v další iteraci.",
+  "author": {
+    "name": "André Heller",
+    "email": "andre.heller@slevomat.cz"
+  },
+  "homepage": "https://github.com/AndreHeller/claude-welcome",
+  "keywords": ["onboarding", "ssh", "git", "claude-concepts", "slevomat"]
+}
