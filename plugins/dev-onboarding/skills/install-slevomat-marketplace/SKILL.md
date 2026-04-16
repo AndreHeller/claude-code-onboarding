@@ -30,17 +30,36 @@ Budoucí pluginy (TODO):
 
 Pokud SSH test selže, **vrať se na `/setup-ssh`** — nejdřív fix, pak pokračuj sem.
 
-## Krok 1: Registrace marketplace
+## Krok 1: Instalace Claude Code CLI (pokud chybí)
 
-Přidej marketplace do svých Claude settings:
+**DŮLEŽITÉ**: plugin příkazy (`/plugin marketplace add`, `/plugin install`) fungují **jen v Claude Code CLI** (terminálový program `claude`), **NE** v Claude Code chat panelu ve VS Code extension. VS Code extension nemá plugin slash commands.
+
+Ověř jestli máš CLI:
 
 ```bash
-# V Claude Code (slash command v chat panelu):
-/plugin marketplace add git@gitlab.com:slevomat/ai/claude-marketplace.git
+claude --version
+```
+
+Pokud `command not found`:
+
+```bash
+curl -fsSL https://claude.ai/install.sh | bash
+source ~/.bashrc
+claude --version    # teď by mělo fungovat
+```
+
+Po instalaci se **nemusíš znovu přihlašovat** — CLI sdílí auth session s VS Code extension (oba čtou `~/.claude/`).
+
+## Krok 2: Registrace marketplace
+
+V **terminálu** (bash, NE v Claude Code chat panelu) spusť:
+
+```bash
+claude plugin marketplace add git@gitlab.com:slevomat/ai/claude-marketplace.git
 ```
 
 Co se stane:
-- Claude Code naklonuje marketplace repo přes SSH do `~/.claude/plugins/marketplaces/slevomat-ai/`.
+- Claude Code CLI naklonuje marketplace repo přes SSH do `~/.claude/plugins/marketplaces/slevomat-ai/`.
 - Přečte `.claude-plugin/marketplace.json` — uvidí že tam je plugin `bi`.
 - Přidá entry do `~/.claude/settings.json` pod `extraKnownMarketplaces.slevomat-ai`.
 
@@ -53,19 +72,20 @@ Měl bys vidět `slevomat-ai` v seznamu.
 
 **Pokud registrace selže s permission denied**: SSH key není v GitLabu, nebo ssh-agent ho nemá. Zkus znovu `ssh -T git@gitlab.com`, vyřeš auth, pak opakuj.
 
-## Krok 2: Install bi plugin
+## Krok 3: Install bi plugin
 
 ```bash
-# V Claude Code:
-/plugin install bi@slevomat-ai
+claude plugin install bi@slevomat-ai
 ```
 
-Claude Code:
+Claude Code CLI:
 1. Přečte `marketplace.json` v slevomat-ai marketplace.
 2. Najde plugin `bi`, vidí `source: git@gitlab.com:slevomat/ai/claude-plugin-bi.git, ref: release/v1`.
 3. Naklonuje plugin repo (SSH) do `~/.claude/plugins/cache/slevomat-ai/bi/<version>/`.
 4. Načte skills + hooks.
 5. Plugin aktivovaný.
+
+**Po instalaci restartuj VS Code** (`Ctrl+Shift+P → Quit`, pak `code ~/dev/claude-welcome`) — VS Code extension si načte nově nainstalované plugins při startu.
 
 Ověř:
 ```bash
