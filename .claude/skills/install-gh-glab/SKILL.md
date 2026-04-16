@@ -52,12 +52,10 @@ Dvě cesty:
 curl -s https://gitlab.com/gitlab-org/cli/-/raw/main/scripts/install.sh | sudo bash
 ```
 
-**Stažením binárky** (fallback):
+**Přes oficiální apt repository** (doporučeno):
 ```bash
-# Nejnovější release z GitLab
-curl -sL https://gitlab.com/gitlab-org/cli/-/releases/permalink/latest/downloads/glab_amd64.deb -o /tmp/glab.deb
-sudo dpkg -i /tmp/glab.deb
-rm /tmp/glab.deb
+curl -fsSL https://packages.gitlab.com/gitlab-org/cli/script.deb.sh | sudo bash
+sudo apt install glab -y
 ```
 
 Ověření:
