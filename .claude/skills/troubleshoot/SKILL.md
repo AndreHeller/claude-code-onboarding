@@ -1,6 +1,6 @@
 ---
 name: troubleshoot
-description: "Typické gotchy v Slevomat AI dev prostředí — SSH permission denied, git authentication issues, plugin install fails, Claude Code extension divný stav, WSL mount problémy, token expirace. Poskytuje diagnostiku a fix pro každý scénář. Auto-invoke při 'něco nefunguje', 'SSH nejde', 'plugin install selže', 'Claude se zasekl'."
+description: "Typické gotchy v dev prostředí — SSH permission denied, git authentication issues, plugin install fails, Claude Code extension divný stav, WSL mount problémy, token expirace. Poskytuje diagnostiku a fix pro každý scénář. Auto-invoke při 'něco nefunguje', 'SSH nejde', 'plugin install selže', 'Claude se zasekl'."
 ---
 
 # Troubleshoot — typické gotchy
@@ -65,14 +65,14 @@ Pokud repo používá HTTPS remote místo SSH:
 ```bash
 # Zkontroluj
 git remote -v
-# origin  https://gitlab.com/slevomat/... (push)
+# origin  https://gitlab.com/your-org/... (push)
 
 # Přepni na SSH
-git remote set-url origin git@gitlab.com:slevomat/....git
+git remote set-url origin git@gitlab.com:your-org/....git
 
 # Ověř
 git remote -v
-# origin  git@gitlab.com:slevomat/... (push)
+# origin  git@gitlab.com:your-org/... (push)
 ```
 
 ## Claude Code extension
@@ -200,7 +200,7 @@ Pokud něco tady není pokryté, nebo fix nefunguje:
 
 1. Napiš mi (v chatu) přesný text chyby + co jsi dělal.
 2. Pokud je to bug Claude Code: [github.com/anthropics/claude-code/issues](https://github.com/anthropics/claude-code/issues).
-3. Slevomat-specific: napiš Andrému (`andre.heller@slevomat.cz`).
+3. Firemní specifické: kontaktuj svého team leada (`mail@andreheller.cz`).
 
 ## Rychlý reset (nouzová možnost)
 

@@ -4,8 +4,8 @@
   "description": "Provede Windows nováčka instalací WSL2 + Ubuntu, VS Code Remote-WSL extension, Claude Code extension. Jediný skill `install-wsl` jako hloubkový tutoriál. Spouštěno z Claude Desktop chatu (ne přes /plugin install — je to fetch markdown URL).",
   "author": {
     "name": "André Heller",
-    "email": "andre.heller@slevomat.cz"
+    "email": "mail@andreheller.cz"
   },
-  "homepage": "https://github.com/AndreHeller/claude-welcome",
+  "homepage": "https://github.com/AndreHeller/claude-code-onboarding",
   "keywords": ["wsl", "windows", "ubuntu", "vscode", "claude-code", "onboarding"]
 }

@@ -1,35 +1,35 @@
 ---
 name: next-steps
-description: "Finální krok dev-onboardingu — navede uživatele na klonování konkrétního Slevomat projektu (dbt, Streamlit, atd.), přepnutí VS Code workspace, a předání na project-specific CLAUDE.md + lokální skills. Auto-invoke při 'co dál', 'hotovo, co teď', 'klonuj projekt'."
+description: "Finální krok dev-onboardingu — navede uživatele na klonování konkrétního projektu (dbt, Streamlit, atd.), přepnutí VS Code workspace, a předání na project-specific CLAUDE.md + lokální skills. Auto-invoke při 'co dál', 'hotovo, co teď', 'klonuj projekt'."
 ---
 
 # Next steps — klonuj projekt a začni pracovat
 
-Gratuluji — máš dokončený **obecný dev setup** pro Slevomat AI:
+Gratuluji — máš dokončený **obecný dev setup** pro dev:
 
 - ✅ WSL2 + Ubuntu + Unix user
 - ✅ VS Code + Remote-WSL + Claude Code extension v WSL
-- ✅ Claude Code login (Slevomat Claude.ai subscription)
+- ✅ Claude Code login (Claude.ai subscription (Team/Enterprise))
 - ✅ SSH klíče (GitLab + GitHub)
-- ✅ Git konfigurace (Slevomat konvence: pull.rebase, pull.ff, user.email)
+- ✅ Git konfigurace (pull.rebase, pull.ff, user.email)
 - ✅ GitHub CLI + GitLab CLI
 - ✅ Claude koncepty (memory vs CLAUDE.md vs skills)
-- ✅ Slevomat marketplace + `bi` plugin (org-wide git konvence + naming)
+- ✅ Firemní marketplace + org-wide plugin (pokud máš)
 
-Teď si **klonuj projekt** na kterém chceš pracovat. Každý Slevomat projekt má vlastní `CLAUDE.md` a často lokální skills v `.claude/skills/`, které tě povedou v jeho specifikách.
+Teď si **klonuj projekt** na kterém chceš pracovat. Každý projekt má vlastní `CLAUDE.md` a často lokální skills v `.claude/skills/`, které tě povedou v jeho specifikách.
 
-## Nejčastější Slevomat BI projekty
+## Nejčastější příklady projektů
 
 ### dbt (hlavní BI projekt)
 
-**Repo**: `git@gitlab.com:slevomat/bi/dbt.git`
+**Repo**: `git@gitlab.com:your-org/your-project.git`
 
 **Co to je**: dbt + Snowflake + Streamlit PoC pro migrace Keboola transformací. 16 staging modelů, 6 core (dim/fact), 1 mart.
 
 **Setup**:
 ```bash
 cd ~/dev
-git clone git@gitlab.com:slevomat/bi/dbt.git
+git clone git@gitlab.com:your-org/your-project.git
 cd dbt
 code .    # otevře VS Code v novém okně s tímto workspace
 ```
@@ -50,7 +50,7 @@ Claude auto-invoke `/onboarding-dbt` skill, který tě dovede:
 ### (Budoucí) další projekty
 
 - `streamlit/business-drivers` — Streamlit dashboard (dbt mart reporting).
-- `slevomat/ai/*` — AI tooling repa (plugins, atd.).
+
 
 Pro každý platí **stejný pattern**:
 1. Klonuj do `~/dev/`.
@@ -86,18 +86,18 @@ Typicky:
 
 CLAUDE.md by měl obsahovat sekci "Jak začít" nebo "Vývojový cyklus". Jdi dle ní.
 
-### 4. Pozvi Slevomat-wide skills když potřeba
+### 4. Pozvi org-wide skills když potřeba
 
 `bi` plugin je **vždy dostupný** (nainstalovaný globally). Pokud máš dotaz k git workflow:
 
 ```
-/slevomat-ai:bi:git-workflow
+org-plugin:git-workflow
 ```
 
 Nebo naming:
 
 ```
-/slevomat-ai:bi:naming-conventions
+org-plugin:naming-conventions
 ```
 
 Org-wide věci jsou tam, projekt-specific v `.claude/skills/`.
@@ -119,7 +119,7 @@ Claude pak plánuje akci a (s tvým permission) spouští tools.
 
 Kdykoli si nejsi jistý:
 - `/troubleshoot` — tento plugin (dev-onboarding) má troubleshoot skill pro infra problémy.
-- `/slevomat-ai:bi:git-workflow audit` — kontrola git nastavení.
+- `org-plugin:git-workflow audit` — kontrola git nastavení.
 - Projekt-specific audit skill (pokud existuje, např. `/audit-dbt-env`).
 - Napiš Claudovi co vidíš + co očekáváš — většinu problémů diagnostikuje sám.
 
@@ -127,6 +127,6 @@ Kdykoli si nejsi jistý:
 
 **Nespěchej.** Dev setup co jsi právě prošel je jednorázová investice — jednou provedeš správně, slouží roky. Projekty se střídají, ale infrastructure zůstává.
 
-Pokud se v některé části tohoto onboardingu zasekl nebo je něco matoucí, **napiš Andrému**: `andre.heller@slevomat.cz`. Feedback je vítaný — příští kolega bude mít lepší experience.
+Pokud se v některé části tohoto onboardingu zasekl nebo je něco matoucí, **napiš autorovi onboardingu (viz README). Feedback je vítaný — příští kolega bude mít lepší experience.
 
 Hodně štěstí. 🚀

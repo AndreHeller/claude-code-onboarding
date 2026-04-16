@@ -1,21 +1,21 @@
 ---
 name: install-wsl
-description: "Hloubkový tutoriál pro Windows nováčky — instalace WSL2 + Ubuntu (latest LTS), Unix user setup, VS Code Remote-WSL extension, Claude Code extension v WSL kontextu, přihlášení Slevomat Claude účtem. Spouštěno v Claude Desktop chatu skrz fetch markdown URL z https://github.com/AndreHeller/claude-welcome. Kolega copy-paste prompt z PROMPT.md, Claude tento skill stáhne a postupuje podle něj."
+description: "Hloubkový tutoriál pro Windows nováčky — instalace WSL2 + Ubuntu (latest LTS), Unix user setup, VS Code Remote-WSL extension, Claude Code extension v WSL kontextu, přihlášení Claude účtem. Spouštěno v Claude Desktop chatu skrz fetch markdown URL z https://github.com/AndreHeller/claude-code-onboarding. Kolega copy-paste prompt z PROMPT.md, Claude tento skill stáhne a postupuje podle něj."
 ---
 
-# Slevomat AI — Windows dev prostředí setup
+# Windows dev prostředí setup
 
-Tenhle skill provede Windows nováčka kompletním setupem dev prostředí pro práci na Slevomat AI / BI projektech. Cíl: po dokončení má funkční WSL2 + Ubuntu + VS Code v WSL mode + Claude Code extension přihlášenou.
+Tenhle skill provede Windows nováčka kompletním setupem dev prostředí pro dev práci. Cíl: po dokončení má funkční WSL2 + Ubuntu + VS Code v WSL mode + Claude Code extension přihlášenou.
 
-**Nezahrnuje** SSH, git config, Slevomat marketplace, žádný projekt-specific setup (dbt, Snowflake, …) — to řeší navazující plugin `dev-onboarding` (instaluje se v Claude Code extension po WSL setupu).
+**Nezahrnuje** SSH, git config, firemní marketplace, žádný projekt-specific setup (dbt, Snowflake, …) — to řeší navazující onboarding workspace.
 
 ## Cíl po dokončení
 
 1. WSL2 + Ubuntu (latest LTS, aktuálně 24.04 "Noble Numbat") na Windows.
 2. Unix user account, pracovní adresář v Linux filesystemu (`/home/<user>/`), ne na Windows mount (`/mnt/c/`).
 3. VS Code na Windows + Remote-WSL extension + Claude Code extension nainstalovaná **v WSL kontextu**.
-4. Přihlášený do Claude Code extension Slevomat firemním emailem.
-5. Připraven instalovat `dev-onboarding` plugin pro pokračování (SSH, git, Slevomat marketplace).
+4. Přihlášený do Claude Code extension firemním emailem.
+5. Připraven pokračovat v onboarding workspace (SSH, git, firemní marketplace).
 
 ## Jak pracovat s tímto tutoriálem
 
@@ -58,7 +58,7 @@ Pokud WSL nebo Ubuntu chybí:
 
 **Vysvětli uživateli CO WSL je**: Linux ve Windows, bez VM, bez dual boot, bez rebootu při switchování. Pod kapotou hyperv-based lehká VM, ale uživatelsky transparentní.
 
-**A PROČ ho potřebujeme**: Slevomat dbt / Python / dev stack je Linux-first. Bez WSL by ve Windows běžně narážel na path separator bugs (`\` vs `/`), file permission issues, line ending mismatch (CRLF vs LF), absent shebang interpreters. WSL všechny tyhle problémy odstraňuje.
+**A PROČ ho potřebujeme**: Python / dev stack je Linux-first. Bez WSL by ve Windows běžně narážel na path separator bugs (`\` vs `/`), file permission issues, line ending mismatch (CRLF vs LF), absent shebang interpreters. WSL všechny tyhle problémy odstraňuje.
 
 **Prerequisites k zmínění**:
 - BIOS virtualizace (Hyper-V, VT-x / AMD-V) — obvykle už enabled, ale občas potřeba zapnout.
@@ -184,7 +184,7 @@ touch README.md
 pwd                # /home/tvoje_jmeno/dev/playground
 ```
 
-Vysvětli proč `touch README.md`: VS Code se trochu lépe chová s ne-prázdným adresářem, plus naznačuje budoucí zvyk (každý Slevomat repo by měl mít README).
+Vysvětli proč `touch README.md`: VS Code se trochu lépe chová s ne-prázdným adresářem, plus naznačuje budoucí zvyk (každý repo by měl mít README).
 
 ## Krok 10: Otevři VS Code v projektu
 
@@ -232,7 +232,7 @@ Ctrl+Shift+P → "Claude Code: Open in Side Bar"
 
 V Claude Code panelu vidíš seznam přihlašovacích metod:
 
-- ✅ **Claude.ai subscription** ← TOHLE pro Slevomat (Team/Enterprise plan).
+- ✅ **Claude.ai subscription** ← TOHLE (Team/Enterprise plan).
 - ❌ Anthropic Console (pay-per-API-use).
 - ❌ Amazon Bedrock (AWS Claude gateway).
 - ❌ Google Vertex AI / Microsoft Foundry (jiné cloud providers).
@@ -241,7 +241,7 @@ V Claude Code panelu vidíš seznam přihlašovacích metod:
 
 **WSL remote login flow** (důležité — liší se od native Windows/macOS):
 
-1. Otevře se browser → přihlas se Slevomat firemním emailem.
+1. Otevře se browser → přihlas se firemním emailem.
 2. Místo automatického callback URL zpět do VS Code: **browser ti zobrazí token string**. Zkopíruj ho.
 3. VS Code mezitím otevřel **input pole čekající na token** (může být v command palette nebo jako popup notifikace).
 4. **Paste token + Enter**.
@@ -257,7 +257,7 @@ Po druhém spuštění VS Code (s funkčními tokeny):
 1. Otevři Claude Code panel: **Ctrl+Shift+P → "Claude Code: Open in Side Bar"**.
 2. V chat panelu napiš:
 
-   > *"Vytvoř mi v tomto workspace soubor `hello.py` který vypíše `Hello from Slevomat!`. Pak mi ukaž jak ho spustit."*
+   > *"Vytvoř mi v tomto workspace soubor `hello.py` který vypíše `Hello World!`. Pak mi ukaž jak ho spustit."*
 
 3. **Permission dialog**: Claude se zeptá jestli smí vytvořit soubor. Klikni **Allow**. Tohle je první z mnoha permission dialogů — Claude nemá default přístup, vše se ptá. Bezpečnostní feature.
 
@@ -273,7 +273,7 @@ Po druhém spuštění VS Code (s funkčními tokeny):
    python3 hello.py
    ```
    
-   Očekávaný výstup: `Hello from Slevomat!`
+   Očekávaný výstup: `Hello World!`
 
 Pokud vidíš výstup → **Claude Code funguje v WSL mode**. 🎉
 
@@ -290,8 +290,8 @@ Pokud vidíš výstup → **Claude Code funguje v WSL mode**. 🎉
 >
 > ```bash
 > cd ~/dev
-> git clone https://github.com/AndreHeller/claude-welcome.git
-> code claude-welcome
+> git clone https://github.com/AndreHeller/claude-code-onboarding.git
+> code claude-code-onboarding
 > ```
 >
 > *Tohle naklonuje veřejné onboarding repo (HTTPS, nepotřebuješ SSH — to nastavíme uvnitř) a otevře nové VS Code okno s tímto workspace.*
@@ -299,10 +299,10 @@ Pokud vidíš výstup → **Claude Code funguje v WSL mode**. 🎉
 > *V novém VS Code okně otevři Claude Code panel (**Ctrl+Shift+P → "Claude Code: Open in Side Bar"**) a napiš:*
 >
 > ```
-> Jsem nový Slevomat AI kolega po WSL setupu. Přečti CLAUDE.md a proveď mě onboardingem.
+> Jsem nový nový kolega po WSL setupu. Přečti CLAUDE.md a proveď mě onboardingem.
 > ```
 >
-> *Claude Code přečte instrukce z workspace a provede tě dalšími kroky — SSH klíč, git konfigurace, GitHub/GitLab CLI, vysvětlení Claude konceptů (memory, CLAUDE.md, skills), registrace privátního Slevomat marketplace.*
+> *Claude Code přečte instrukce z workspace a provede tě dalšími kroky — SSH klíč, git konfigurace, GitHub/GitLab CLI, vysvětlení Claude konceptů (memory, CLAUDE.md, skills), registrace privátního firemní marketplace.*
 >
 > ***Důležité — permission dialogs**: V Claude Code extension budeš vidět **Allow / Deny** dialogy při každé akci (čtení souboru, spuštění příkazu, edit). To je bezpečnostní feature, ne bug. V začátcích prostě **Allow** vše — jsme v izolovaném Linux WSL prostředí, low risk. Postupně se naučíš permission modes."*
 

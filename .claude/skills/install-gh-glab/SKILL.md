@@ -1,15 +1,11 @@
 ---
 name: install-gh-glab
-description: "Instalace GitHub CLI (gh) a GitLab CLI (glab) v Ubuntu WSL. Oba jsou nutné protože Slevomat má repa na GitLabu (hlavní) i GitHubu (veřejné tooling). Vysvětluje k čemu slouží, jak se přihlásit, základní commands. Auto-invoke při 'nainstaluj gh glab', 'GitHub CLI', 'GitLab CLI'."
+description: "Instalace GitHub CLI (gh) a GitLab CLI (glab) v Ubuntu WSL. Vysvětluje k čemu slouží, jak se přihlásit, základní commands. Auto-invoke při 'nainstaluj gh glab', 'GitHub CLI', 'GitLab CLI'."
 ---
 
 # GitHub CLI (gh) a GitLab CLI (glab)
 
-Oba jsou command-line nástroje pro práci s Git hosting službami **z terminálu** bez nutnosti otevírat browser. Slevomat má:
-- **Hlavní repa na GitLabu** (`gitlab.com/slevomat/*`) — potřebuješ `glab`.
-- **Nějaká veřejná tooling repa na GitHubu** (např. `github.com/AndreHeller/claude-welcome` co sis právě klonoval) — potřebuješ `gh`.
-
-Proto nainstalujeme oboje.
+Command-line nástroje pro práci s Git hosting službami **z terminálu** bez nutnosti otevírat browser. Pokud tvůj tým používá GitHub i GitLab, nainstaluj oboje.
 
 ## Co tyto CLI umí
 

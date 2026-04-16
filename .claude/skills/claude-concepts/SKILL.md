@@ -64,7 +64,7 @@ Když Claude odpovídá na tvou zprávu, kombinuje **šest zdrojů informací**:
   - **Projekt-lokální skills**: `<repo>/.claude/skills/<skill-name>/SKILL.md`.
 - **Perzistence**: plugins jsou instalované přes `/plugin install`, verzované přes marketplace. Projekt-lokální jsou commitnuté do git.
 - **Spouští**: buď **automaticky** (Claude detekuje relevant situation podle `description` ve SKILL.md frontmatter), nebo **manuálně** (slash command `/setup-ssh`).
-- **Co obsahuje**: specializované znalosti — `setup-ssh` ví jak SSH klíče generovat, `naming-conventions` ví Slevomat BI naming patterns.
+- **Co obsahuje**: specializované znalosti — `setup-ssh` ví jak SSH klíče generovat, `naming-conventions` ví firemní naming patterns.
 
 **Kdo píše**: autor pluginu (centrálně) + repo owner (pro lokální skills).
 
@@ -142,4 +142,4 @@ Když Claude odpovídá na tvou zprávu, kombinuje **šest zdrojů informací**:
 
 ## Hotovo, co dál
 
-Rozumíš Claude architektuře. Teď pokračuj na **`/install-slevomat-marketplace`** — registrujeme privátní Slevomat GitLab marketplace a nainstalujeme `bi` plugin (org-wide git konvence, naming).
+Rozumíš Claude architektuře. Pokud tvůj tým má **firemní plugin marketplace**, pokračuj na `install-marketplace` (volitelné). Jinak pokračuj na `next-steps` — klonuj svůj projekt.
