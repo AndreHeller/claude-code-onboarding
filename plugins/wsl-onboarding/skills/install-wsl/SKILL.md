@@ -277,7 +277,7 @@ Po druhém spuštění VS Code (s funkčními tokeny):
 
 Pokud vidíš výstup → **Claude Code funguje v WSL mode**. 🎉
 
-## Krok 14: Handoff na dev-onboarding plugin
+## Krok 14: Handoff na dev onboarding workspace
 
 Řekni uživateli:
 
@@ -286,15 +286,24 @@ Pokud vidíš výstup → **Claude Code funguje v WSL mode**. 🎉
 > - *VS Code + Remote-WSL + Claude Code extension v WSL ✓*
 > - *Claude login + permission dialog vyzkoušený + smoke test prošel ✓*
 >
-> ***Co tě čeká dál:**
-> *Přejdi do Claude Code extension v VS Code (NE zpátky sem do Claude Desktop). V Claude Code chat panelu napiš:*
+> ***Co tě čeká dál — 3 příkazy v Ubuntu terminálu** (Ctrl+backtick ve VS Code, nebo otevři Ubuntu z Start menu):*
 >
-> ```*
-> *Jsem nový Slevomat AI kolega, právě jsem dokončil WSL setup. Nainstaluj mi prosím plugin `dev-onboarding@claude-welcome` z https://github.com/AndreHeller/claude-welcome a spusť skill `welcome` — ať mě provede SSH klíčem, git konfigurací, instalací GitHub/GitLab CLI, vysvětlením Claude konceptů (memory, CLAUDE.md, skills) a registrací privátního Slevomat marketplace.*
-> ```*
+> ```bash
+> cd ~/dev
+> git clone https://github.com/AndreHeller/claude-welcome.git
+> code claude-welcome
+> ```
 >
-> *Plugin tě dovede k bodu kdy budeš mít přístup k Slevomat org-wide pluginům (`bi`) a budeš si moct klonovat projekt na kterém chceš pracovat (dbt, atd.). Každý projekt má vlastní `CLAUDE.md` + lokální skills, které tě povedou v jeho specifikách.*
+> *Tohle naklonuje veřejné onboarding repo (HTTPS, nepotřebuješ SSH — to nastavíme uvnitř) a otevře nové VS Code okno s tímto workspace.*
 >
-> ***Důležité — permission dialogs**: V Claude Code extension budeš vidět **Allow / Deny** dialogy při každé akci (čtení souboru, spuštění příkazu, edit). To je bezpečnostní feature, ne bug. V začátcích prostě **Allow** vše — jsme v izolovaném Linux WSL prostředí, low risk. Postupně se naučíš permission modes (auto-allow, trusted patterns) — naučí tě to dev-onboarding plugin."*
+> *V novém VS Code okně otevři Claude Code panel (**Ctrl+Shift+P → "Claude Code: Open in Side Bar"**) a napiš:*
+>
+> ```
+> Jsem nový Slevomat AI kolega po WSL setupu. Přečti CLAUDE.md a proveď mě onboardingem.
+> ```
+>
+> *Claude Code přečte instrukce z workspace a provede tě dalšími kroky — SSH klíč, git konfigurace, GitHub/GitLab CLI, vysvětlení Claude konceptů (memory, CLAUDE.md, skills), registrace privátního Slevomat marketplace.*
+>
+> ***Důležité — permission dialogs**: V Claude Code extension budeš vidět **Allow / Deny** dialogy při každé akci (čtení souboru, spuštění příkazu, edit). To je bezpečnostní feature, ne bug. V začátcích prostě **Allow** vše — jsme v izolovaném Linux WSL prostředí, low risk. Postupně se naučíš permission modes."*
 
 ## Začni krokem 1.
