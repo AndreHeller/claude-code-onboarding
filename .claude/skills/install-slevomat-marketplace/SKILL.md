@@ -48,6 +48,13 @@ echo "Stahuji a instaluji Claude Code CLI (~30-60 sekund, nic nevypisuje — če
 
 **POZOR**: příkaz **dlouho nic nevypisuje** (30-60 sekund ticho). Vypadá jako že se zasekl — ale na pozadí stahuje ~50 MB binárku a instaluje. **Čekej** dokud neuvidíš "Hotovo!" a verzi CLI. Neklikej Ctrl+C.
 
+Pokud po instalaci `claude --version` říká `command not found` — instalátor přidal binárku do `~/.local/bin/` ale PATH ji neobsahuje. Fix:
+
+```bash
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc && source ~/.bashrc
+claude --version    # teď by mělo fungovat
+```
+
 Po instalaci se **nemusíš znovu přihlašovat** — CLI sdílí auth session s VS Code extension (oba čtou `~/.claude/`).
 
 ## Krok 2: Registrace marketplace
