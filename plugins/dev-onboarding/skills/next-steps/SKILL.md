@@ -1,132 +1,110 @@
 ---
 name: next-steps
-description: "ONBOARDING finální krok — navede nového kolegu na klonování konkrétního projektu (dbt, Streamlit, atd.), přepnutí VS Code workspace, a předání na project-specific CLAUDE.md + lokální skills. Auto-invoke JEN v onboarding kontextu: 'dokončil jsem onboarding, co dál', 'welcome mě poslal na next-steps', 'klonuj mi první projekt po onboardingu'. NEVOLAT při obecném 'co dál' — to může být cokoliv."
+description: "ONBOARDING finální krok — navede nového kolegu na klonování prvního projektu, přepnutí VS Code workspace, a předání na project-specific CLAUDE.md + lokální skills. Adaptivně detekuje, zda má kolega nainstalovaný firemní plugin, a pokud ano, nasměruje na jeho project-specific onboarding skills. Auto-invoke JEN v onboarding kontextu: 'dokončil jsem onboarding, co dál', 'welcome mě poslal na next-steps', 'klonuj mi první projekt po onboardingu'. NEVOLAT při obecném 'co dál' — to může být cokoliv."
 ---
 
 # Next steps — klonuj projekt a začni pracovat
 
-Gratuluji — máš dokončený **obecný dev setup** pro dev:
+Gratuluji — máš dokončený **obecný dev setup**:
 
-- ✅ WSL2 + Ubuntu + Unix user
-- ✅ VS Code + Remote-WSL + Claude Code extension v WSL
-- ✅ Claude Code login (Claude.ai subscription (Team/Enterprise))
-- ✅ SSH klíče (GitLab + GitHub)
+- ✅ WSL2 + Ubuntu + Unix user (pokud jsi Windows)
+- ✅ VS Code + Remote-WSL + Claude Code extension
+- ✅ Claude Code login
+- ✅ SSH klíče (GitHub / GitLab)
 - ✅ Git konfigurace (pull.rebase, pull.ff, user.email)
 - ✅ GitHub CLI + GitLab CLI
 - ✅ Claude koncepty (memory vs CLAUDE.md vs skills)
-- ✅ Firemní marketplace + org-wide plugin (pokud máš)
+- ✅ Firemní marketplace + plugin (pokud máš)
 
-Teď si **klonuj projekt** na kterém chceš pracovat. Každý projekt má vlastní `CLAUDE.md` a často lokální skills v `.claude/skills/`, které tě povedou v jeho specifikách.
+Teď si **klonuj první projekt** na kterém chceš pracovat.
 
-## Nejčastější příklady projektů
+## Univerzální pattern pro každý projekt
 
-### dbt (hlavní BI projekt)
+Platí pro jakýkoliv dev projekt (web, data pipeline, ML, cokoliv):
 
-**Repo**: `git@gitlab.com:your-org/your-project.git`
+### 1. Klonuj repo do ~/dev/
 
-**Co to je**: dbt + Snowflake + Streamlit PoC pro migrace Keboola transformací. 16 staging modelů, 6 core (dim/fact), 1 mart.
-
-**Setup**:
 ```bash
 cd ~/dev
-git clone git@gitlab.com:your-org/your-project.git
-cd dbt
-code .    # otevře VS Code v novém okně s tímto workspace
+git clone <url-tvého-repa>   # SSH (git@...) je preferované, máš klíče nastavené
+cd <název-projektu>
 ```
 
-**Co bude dál**: v novém VS Code okně se načte projektový `CLAUDE.md` + lokální `.claude/skills/onboarding-dbt` skill. Napiš Claudovi:
+### 2. Otevři ve VS Code
 
-> *"Jsem nový kolega v dbt projektu, proveď mě onboardingem."*
+```bash
+code .
+```
 
-Claude auto-invoke `/onboarding-dbt` skill, který tě dovede:
-- Python venv + `pip install dbt-core dbt-snowflake`.
-- Snowflake keypair generace + upload public klíče Andrému (nebo sám přes Snowflake UI).
-- `~/.dbt/profiles.yml` s per-user schema (`DEV_<JMENO>`).
-- `dbt debug` ověření connection.
-- První `dbt run -s stg_products` smoke test.
+Otevře se **nové VS Code okno** přesně s tímto workspace. Claude Code extension načte projektová pravidla z `CLAUDE.md` automaticky.
 
-Čas: ~20-30 min (většinou čekání na pip install a Snowflake Workspaces access od admina).
-
-### (Budoucí) další projekty
-
-- `streamlit/business-drivers` — Streamlit dashboard (dbt mart reporting).
-
-
-Pro každý platí **stejný pattern**:
-1. Klonuj do `~/dev/`.
-2. Otevři ve VS Code (`code .`).
-3. Přečti `CLAUDE.md` (Claude to udělá automaticky).
-4. Hledej `.claude/skills/onboarding-*` skill — projekt-specific průvodce.
-5. Pokud skill existuje, pusť ho. Pokud ne, napiš Andrému že by se hodil.
-
-## Jak pracovat v novém projektu — flow template
-
-Po klonování projektu pattern vypadá takto:
-
-### 1. Přečti si CLAUDE.md
+### 3. Přečti CLAUDE.md
 
 ```bash
 cat CLAUDE.md
 ```
 
-Nebo otevři v VS Code a přečti. **Pozorně**. Tam je business kontext, architektura, konvence, "co nesahat". Investuj 15 minut do čtení — ušetří hodiny debugging později.
+Nebo otevři v editoru. **Pozorně**. Tam bývá business kontext, architektura, týmové konvence, "co nesahat". 15 minut čtení ušetří hodiny debugování později.
 
-### 2. Lokální skills (pokud jsou)
+### 4. Hledej project-specific onboarding skill
 
 ```bash
 ls .claude/skills/
 ```
 
-Typicky:
-- `onboarding-*` — setup tohoto projektu.
-- `audit-*` — kontrola stavu prostředí pro tento projekt.
-- Další project-specific expertise.
+Typická jména:
+- `onboarding-*` — project setup průvodce (virtualenv, env credentials, DB access, smoke test)
+- `audit-*` — kontrola stavu prostředí pro tento projekt
+- Další project-specific expertise
 
-### 3. Jdi podle doporučeného flow
+Pokud existuje onboarding skill, napiš Claudovi:
 
-CLAUDE.md by měl obsahovat sekci "Jak začít" nebo "Vývojový cyklus". Jdi dle ní.
+> *"Jsem nový v tomto projektu, proveď mě setupem."*
 
-### 4. Pozvi org-wide skills když potřeba
+Claude skill auto-invoke a provede tě. Pokud skill neexistuje, postupuj podle `CLAUDE.md` ručně.
 
-`bi` plugin je **vždy dostupný** (nainstalovaný globally). Pokud máš dotaz k git workflow:
+### 5. Pokud něco chybí, napiš autorovi
 
-```
-org-plugin:git-workflow
-```
+Pokud projekt nemá `CLAUDE.md` nebo onboarding skill, **napiš autorovi repa** (viz `git log | head -5` pro poslední autory, nebo README). Feedback je vítaný — další kolega bude mít lepší experience.
 
-Nebo naming:
+## Máš firemní plugin? Zjistíme to
 
-```
-org-plugin:naming-conventions
+```bash
+claude plugin list 2>&1 | grep -v "^$" | head -20
 ```
 
-Org-wide věci jsou tam, projekt-specific v `.claude/skills/`.
+- **Pokud vidíš firemní plugin** (např. `bi@slevomat-ai`, `<firma>-skills@<firma>-marketplace`): firemní plugin má typicky **project-specific onboarding skills** nebo org-wide doporučení co klonovat. Projdi jeho popis:
+  ```bash
+  claude plugin list --verbose 2>&1 | head -40
+  ```
+  A napiš Claudovi: *"Mám firemní plugin `<název>`, co s ním dál?"* — adaptivně ti poradí.
 
-## Trust layers (jak Claude kombinuje info)
+- **Pokud nemáš žádný firemní plugin**: OK, pokračuj univerzálním patternem výše. Pokud tě zajímá registrace firemního marketplace, spusť **`install-marketplace`** skill.
 
-Když v projektu pracuješ, Claude v každé zprávě **kombinuje**:
+## Trust layers — jak Claude kombinuje info
+
+Když v projektu pracuješ, Claude v každé zprávě kombinuje:
 
 1. **Tvoje aktuální zpráva** (co chceš).
-2. **Conversation history** (co už jsme v této session probrali).
-3. **Memory files** (`~/.claude/projects/.../memory/` — tvoje projekt-specific knowledge).
-4. **CLAUDE.md** projektu (načten automaticky, sdílený s týmem).
-5. **Lokální skills** v projektu (loaded on-demand).
-6. **Global pluginy** (bi, atd.) — skills loaded per popis match.
+2. **Conversation history** (co už jsme probrali).
+3. **Memory files** (`~/.claude/projects/.../memory/` — tvoje personal persistent poznatky).
+4. **Projektový `CLAUDE.md`** (načten automaticky, sdílený s týmem).
+5. **Lokální skills** v projektu (`.claude/skills/`, on-demand).
+6. **Nainstalované pluginy** (firemní + osobní, skills load per description match).
 
 Claude pak plánuje akci a (s tvým permission) spouští tools.
 
 ## Co když se ztratíš
 
-Kdykoli si nejsi jistý:
-- `/troubleshoot` — tento plugin (dev-onboarding) má troubleshoot skill pro infra problémy.
-- `org-plugin:git-workflow audit` — kontrola git nastavení.
-- Projekt-specific audit skill (pokud existuje, např. `/audit-dbt-env`).
-- Napiš Claudovi co vidíš + co očekáváš — většinu problémů diagnostikuje sám.
+- **`troubleshoot`** skill v tomto pluginu pokrývá typické infra problémy (SSH, git, WSL).
+- **Project-specific audit skill** (pokud projekt má — např. `audit-<projekt>-env`) — kontrola specifického projektu.
+- **Firemní plugin** může mít obecné git/review/deployment skills.
+- **Prostě napiš Claudovi** co vidíš + co očekáváš. Většinu problémů diagnostikuje sám.
 
 ## Finální rada
 
-**Nespěchej.** Dev setup co jsi právě prošel je jednorázová investice — jednou provedeš správně, slouží roky. Projekty se střídají, ale infrastructure zůstává.
+**Nespěchej.** Dev setup co jsi právě prošel je jednorázová investice — jednou provedeš správně, slouží roky. Projekty se střídají, infrastruktura zůstává.
 
-Pokud se v některé části tohoto onboardingu zasekl nebo je něco matoucí, **napiš autorovi onboardingu (viz README). Feedback je vítaný — příští kolega bude mít lepší experience.
+Pokud se v některé části onboardingu zasekl nebo je něco matoucí, **napiš autorovi onboardingu** (viz `README.md` tohoto pluginu). Feedback dělá další iteraci lepší.
 
 Hodně štěstí. 🚀
