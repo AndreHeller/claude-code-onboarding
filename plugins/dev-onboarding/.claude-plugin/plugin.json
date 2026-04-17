@@ -1,0 +1,11 @@
+{
+  "name": "dev-onboarding",
+  "version": "0.2.0-alpha",
+  "description": "Provede nového kolegu kompletním setupem dev prostředí — od WSL (pro Windows) přes SSH klíče, git config, GitHub/GitLab CLI, Claude koncepty, až po klonování projektu. Welcome skill funguje jako router: zdetekuje OS + stav a nasměruje na relevantní skill. Obecný (ne firemně specifický); firemní marketplace řeší adaptivní install-marketplace skill.",
+  "author": {
+    "name": "André Heller",
+    "email": "mail@andreheller.cz"
+  },
+  "homepage": "https://github.com/AndreHeller/claude-code-onboarding",
+  "keywords": ["onboarding", "wsl", "ssh", "git", "github", "gitlab", "gh", "glab", "claude-code", "cowork"]
+}

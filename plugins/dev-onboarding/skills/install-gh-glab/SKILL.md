@@ -1,6 +1,6 @@
 ---
 name: install-gh-glab
-description: "Instalace GitHub CLI (gh) a GitLab CLI (glab) v Ubuntu WSL. Vysvětluje k čemu slouží, jak se přihlásit, základní commands. Auto-invoke při 'nainstaluj gh glab', 'GitHub CLI', 'GitLab CLI'."
+description: "ONBOARDING krok — první instalace GitHub CLI (gh) a GitLab CLI (glab) v Ubuntu/WSL/macOS. Vysvětluje k čemu slouží, jak se přihlásit přes browser (Token volba, ne SSH), základní commands. Auto-invoke JEN v onboarding kontextu: 'jsem nový kolega, nainstaluj gh glab', 'onboarding gh glab', 'welcome mě poslal na install-gh-glab'. NEVOLAT při pozdějších dotazech typu 'jak funguje gh pr create' — ty zvládne Claude z obecných znalostí."
 ---
 
 # GitHub CLI (gh) a GitLab CLI (glab)

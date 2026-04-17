@@ -1,27 +1,46 @@
-# CLAUDE.md — Dev onboarding workspace
+# CLAUDE.md — Dev onboarding repo
 
-Tento repo je **onboarding workspace** pro nové kolegy. Otevři ho jako VS Code workspace a Claude Code extension tě provede setupem dev prostředí.
+Tento repo hostuje **jeden Claude Code plugin `dev-onboarding`** ([plugins/dev-onboarding/](plugins/dev-onboarding/)) pro nové kolegy. Primární distribuce je přes **firemní Claude Team marketplace** (admin org-wide). Fallback cesty: lokální `claude plugin install` nebo copy-paste PROMPT.md v Claude Desktop.
 
-## Jak začít
+## Jak Claude pozná, že má onboardit
 
-Napiš v Claude Code chatu:
+Uživatel napíše něco jako:
 
 > *"Jsem nový, proveď mě onboardingem."*
+> *"Nastav mi dev prostředí."*
+> *"Pokračuj onboardingem."*
 
-Claude najde `welcome` skill a začne tě vést.
+Claude najde skill **`welcome`** v plugin `dev-onboarding` a aktivuje ho. Welcome je **router**:
 
-## Dostupné skills (v `.claude/skills/`)
+1. Detekuje OS (`uname -s`, `$WSL_DISTRO_NAME`).
+2. Funkčním testem zjistí stav SSH, git, gh, glab (ne existenční — různí kolegové mají klíče pojmenované jinak).
+3. Ukáže dashboard ✓/✗ a nasměruje na další relevantní skill.
 
-Doporučené pořadí:
+## Skills v plugin `dev-onboarding`
 
-1. **`welcome`** — detekce stavu (SSH, git, gh, glab), rozcestník.
-2. **`setup-ssh`** — SSH klíč (ed25519), upload do GitLab + GitHub. Hloubkový tutoriál: co je SSH, rozdíl od hesla/tokenu/OAuth.
-3. **`setup-git`** — git config: pull.rebase, pull.ff, user.email. Proč lineární historie.
-4. **`install-gh-glab`** — GitHub CLI + GitLab CLI instalace a login.
-5. **`claude-concepts`** — Claude architektura: memory vs CLAUDE.md vs skills vs hooks. Kde co leží, co modifikovat.
-6. **`install-marketplace`** — volitelné: registrace firemního privátního marketplace. Zeptá se z jaké jsi firmy a adaptuje instrukce.
-7. **`next-steps`** — "klonuj projekt na kterém chceš pracovat."
-8. **`troubleshoot`** — typické gotchy.
+Pořadí v routeru welcome:
+
+1. **`install-wsl`** — jen pro Windows uživatele v Cowork (Desktop). Ostatní skip.
+2. **`setup-ssh`** — per-service SSH klíče pro GitHub + GitLab. Hloubkový tutoriál.
+3. **`setup-git`** — user.name, user.email, pull.rebase=true, pull.ff=only. Vysvětlí proč.
+4. **`install-gh-glab`** — GitHub CLI + GitLab CLI, auth login.
+5. **`claude-concepts`** — memory vs CLAUDE.md vs skills vs hooks. Kde co leží.
+6. **`install-marketplace`** — volitelné, adaptivní (zeptá se z jaké firmy je kolega).
+7. **`next-steps`** — klonuj první projekt.
+8. **`troubleshoot`** — on-demand, dlouhodobě užitečný (SSH fails, git auth issues, plugin problems).
+
+## Distribuce
+
+- **Slevomat kolega (Team plan)**: admin nastavil plugin jako *Installed by default* v Team marketplace (GitHub sync z tohoto repa). Plugin je aktivní v Cowork/Code automaticky.
+- **Jiná firma nebo individuál**: `claude plugin marketplace add https://github.com/AndreHeller/claude-code-onboarding.git` + `claude plugin install dev-onboarding`.
+- **Claude Desktop / žádný plugin marketplace**: copy-paste [PROMPT.md](PROMPT.md) do chatu (fallback, stahuje `install-wsl/SKILL.md` přes URL).
+
+## Lokální dev (pro autora)
+
+```bash
+claude plugin marketplace add file:///home/avatar/dev/claude-welcome
+claude plugin install dev-onboarding
+```
 
 ## Pravidla pro Claude
 
@@ -30,3 +49,4 @@ Doporučené pořadí:
 - **Bezpečnost** — neptej se na hesla, privátní klíče nevypisuj.
 - **Permission dialogy** — uživatel bude vidět Allow/Deny, to je normální.
 - **Neinstaluj nic bez vysvětlení** — u každého `apt install`, `pip install`, `ssh-keygen` řekni proč.
+- **Funkční > existenční detekce** — pro stav prostředí použij funkční testy (`ssh -T`, `git config --get`, `gh auth status`), ne kontrolu souborů na standardních cestách.

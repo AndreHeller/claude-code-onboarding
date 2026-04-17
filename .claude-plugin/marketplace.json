@@ -1,0 +1,20 @@
+{
+  "name": "claude-code-onboarding",
+  "owner": {
+    "name": "André Heller",
+    "email": "mail@andreheller.cz"
+  },
+  "description": "Lokální marketplace repa pro testování pluginu dev-onboarding bez publish. Používá se pro dev iteraci autora — přidej přes `claude plugin marketplace add file:///home/avatar/dev/claude-welcome` a nainstaluj `claude plugin install dev-onboarding`. Pro ostrou distribuci (Slevomat Team plan) se plugin naroluje adminovi přes GitHub sync z tohoto repa.",
+  "plugins": [
+    {
+      "name": "dev-onboarding",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/AndreHeller/claude-code-onboarding.git",
+        "ref": "main",
+        "path": "plugins/dev-onboarding"
+      },
+      "description": "Dev prostředí onboarding pro nového kolegu — WSL (Windows), SSH klíče, git config, GitHub/GitLab CLI, Claude koncepty, firemní marketplace, klonování prvního projektu. Welcome skill router detekuje OS + stav a nasměruje na relevantní další skill."
+    }
+  ]
+}

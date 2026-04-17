@@ -1,6 +1,6 @@
 ---
 name: install-marketplace
-description: "Volitelný krok — registrace firemního privátního Claude Code plugin marketplace. Zeptá se uživatele z jaké je firmy a adaptuje instrukce. Pro Slevomat kolegy: nainstaluje bi plugin z privátního GitLab marketplace. Pro ostatní: vysvětlí jak firemní marketplace funguje obecně. Auto-invoke při 'marketplace', 'firemní plugin', 'org-wide konvence'."
+description: "ONBOARDING volitelný krok — registrace firemního privátního Claude Code plugin marketplace. Adaptivní: zeptá se uživatele z jaké je firmy. Pro Slevomat kolegy nainstaluje BI plugin z privátního GitLab marketplace. Pro ostatní vysvětlí jak firemní marketplace obecně funguje a kolega si nastaví svůj. Auto-invoke JEN v onboarding kontextu: 'jsem nový kolega, nastav firemní marketplace', 'onboarding marketplace', 'welcome mě poslal na install-marketplace'. NEVOLAT při obecných dotazech o Claude pluginech nebo marketplaces."
 ---
 
 # Firemní plugin marketplace (volitelné)

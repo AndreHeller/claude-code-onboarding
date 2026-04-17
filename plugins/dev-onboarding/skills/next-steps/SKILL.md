@@ -1,6 +1,6 @@
 ---
 name: next-steps
-description: "Finální krok dev-onboardingu — navede uživatele na klonování konkrétního projektu (dbt, Streamlit, atd.), přepnutí VS Code workspace, a předání na project-specific CLAUDE.md + lokální skills. Auto-invoke při 'co dál', 'hotovo, co teď', 'klonuj projekt'."
+description: "ONBOARDING finální krok — navede nového kolegu na klonování konkrétního projektu (dbt, Streamlit, atd.), přepnutí VS Code workspace, a předání na project-specific CLAUDE.md + lokální skills. Auto-invoke JEN v onboarding kontextu: 'dokončil jsem onboarding, co dál', 'welcome mě poslal na next-steps', 'klonuj mi první projekt po onboardingu'. NEVOLAT při obecném 'co dál' — to může být cokoliv."
 ---
 
 # Next steps — klonuj projekt a začni pracovat

@@ -1,68 +1,96 @@
 # claude-code-onboarding
 
-**Open-source** Claude Code onboarding pro dev týmy. Provede nového kolegu kompletním setupem dev prostředí — od Windows/WSL install po SSH, git, CLI nástroje a Claude Code koncepty.
+**Open-source** Claude Code plugin `dev-onboarding` pro dev týmy. Jeden plugin provede nového kolegu **kompletním** setupem — od Windows/WSL instalace přes SSH, git, CLI nástroje, Claude koncepty, volitelně firemní plugin marketplace, až po klonování prvního projektu.
 
 ## Komu je to určeno
 
-- **Dev / BI inženýr** na Windows — potřebuješ WSL + VS Code + Claude Code extension + SSH + git. ✅
-- **Existující Linux/macOS dev** — přeskoč WSL fázi, začni rovnou fází 2 (SSH, git, CLI).
-- **Tvůj tým** — forkni, uprav skills na vlastní konvence, přidej vlastní marketplace krok.
+- **Dev / BI inženýr na Windows** — plugin obsahuje `install-wsl` skill (WSL2 + Ubuntu + VS Code Remote-WSL + Claude Code extension).
+- **Existující Linux / macOS dev** — plugin router přeskočí WSL a začne rovnou SSH/git/CLI fází.
+- **Firma** — admin nainstaluje plugin org-wide přes Claude Team marketplace. Forkni, uprav skills na vlastní konvence.
 
-## Jak začít
+## Tři cesty instalace
 
-### Fáze 1: Windows → WSL + VS Code + Claude Code extension
+### 1. Team / Enterprise plan (doporučeno pro firmy)
 
-1. Otevři **Claude Desktop** chat (z [claude.ai/download](https://claude.ai/download)).
-2. Copy-paste prompt z **[PROMPT.md](PROMPT.md)**.
-3. Claude tě provede WSL instalací krok za krokem.
-4. Na konci dostaneš instrukce pro fázi 2.
+Admin v [Claude Team marketplace](https://support.claude.com/en/articles/13837433-manage-claude-cowork-plugins-for-your-organization) nastaví tento repo jako GitHub sync source a plugin `dev-onboarding` označí jako *Installed by default*. Noví kolegové ho mají v Cowork / Claude Code automaticky.
 
-### Fáze 2: SSH + git + CLI + Claude koncepty
+### 2. Individuální instalace přes marketplace
 
 ```bash
-cd ~/dev
-git clone https://github.com/AndreHeller/claude-code-onboarding.git
-code claude-code-onboarding
+claude plugin marketplace add https://github.com/AndreHeller/claude-code-onboarding.git
+claude plugin install dev-onboarding
 ```
 
-V Claude Code extension napiš: *"Jsem nový, proveď mě onboardingem."*
+Pak napíše v Claude Code (nebo Cowork): *"Jsem nový, proveď mě onboardingem."*
 
-Claude přečte CLAUDE.md + `.claude/skills/` z tohoto workspace a provede tě:
-- **SSH klíče** (ed25519, per-service pro GitLab + GitHub, hloubkový tutoriál co je SSH/token/OAuth)
-- **Git config** (pull.rebase, pull.ff, user.email — s vysvětlením proč lineární historie)
-- **GitHub CLI + GitLab CLI** (instalace, login)
-- **Claude koncepty** (memory vs CLAUDE.md vs skills — kde co leží, co modifikovat)
-- **Firemní marketplace** (volitelné — zeptá se z jaké jsi firmy a adaptuje se)
-- **Handoff** na konkrétní projekt (klonuj, jeho CLAUDE.md přebírá)
+### 3. Fallback pro Claude Desktop bez pluginu (Windows nováček)
 
-### Fáze 3: Tvůj projekt
+Kolega, co ještě nemá Claude Code (typicky Windows bez WSL), má **Claude Desktop**. Plugin tam neexistuje, ale:
 
-Po fázi 2 klonuješ svůj projekt. Pokud má `CLAUDE.md` a `.claude/skills/`, Claude tě tam provede project-specific setupem.
+1. Otevře **Claude Desktop** chat ([claude.ai/download](https://claude.ai/download)).
+2. Copy-paste prompt z **[PROMPT.md](PROMPT.md)**.
+3. Claude Desktop fetchne `install-wsl` tutoriál přes URL a provede WSL instalací.
+4. Po WSL instalaci kolega pokračuje cestou 1 nebo 2 (plugin v Claude Code/Cowork).
 
-## Struktura
+## Co plugin udělá
+
+`welcome` skill funguje jako **router**:
+
+1. Detekce OS (`uname -s`, `$WSL_DISTRO_NAME`) + funkční testy (ne existenční — různí kolegové mají klíče pojmenované jinak):
+   - `ssh -T git@github.com` / `ssh -T git@gitlab.com`
+   - `git config --get user.email`, `gh auth status`, `glab auth status`
+2. Dashboard **✓ máš / ✗ chybí**.
+3. Nasměrování na relevantní další skill:
+
+| Skill | Co dělá |
+|---|---|
+| `install-wsl` | jen Windows v Cowork — WSL2 + Ubuntu + VS Code + Claude Code |
+| `setup-ssh` | per-service SSH klíče pro GitHub + GitLab, hloubkový tutoriál |
+| `setup-git` | user.name/email, pull.rebase=true, pull.ff=only + proč |
+| `install-gh-glab` | GitHub CLI + GitLab CLI, auth login |
+| `claude-concepts` | memory vs CLAUDE.md vs skills vs hooks |
+| `install-marketplace` | volitelné, adaptivní (Slevomat BI / generic) |
+| `next-steps` | klonuj první projekt, přepni workspace |
+| `troubleshoot` | on-demand — SSH/git fails, plugin problems, WSL gotchy |
+
+## Struktura repa
 
 ```
 claude-code-onboarding/
-├── CLAUDE.md                          ← instrukce pro Claude Code v tomto workspace
-├── PROMPT.md                          ← copy-paste prompt pro Claude Desktop (fáze 1)
-├── .claude/skills/                    ← 8 skills pro fázi 2
-│   ├── welcome/                       ← entry point, detekce stavu
-│   ├── setup-ssh/                     ← SSH klíč + tutoriál auth metod
-│   ├── setup-git/                     ← git config + rebase/ff/lineární historie
-│   ├── install-gh-glab/               ← GitHub CLI + GitLab CLI
-│   ├── claude-concepts/               ← memory vs CLAUDE.md vs skills
-│   ├── install-marketplace/            ← volitelné: firemní plugin marketplace
-│   ├── next-steps/                    ← handoff na tvůj projekt
-│   └── troubleshoot/                  ← typické gotchy
-└── plugins/wsl-onboarding/            ← zdroj pro PROMPT.md (fáze 1)
+├── .claude-plugin/
+│   └── marketplace.json                    ← pro lokální dev (autor) / GitHub sync source
+├── CLAUDE.md                               ← instrukce pro Claude v tomto workspace
+├── PROMPT.md                               ← fallback copy-paste prompt pro Claude Desktop
+└── plugins/
+    └── dev-onboarding/
+        ├── .claude-plugin/plugin.json
+        └── skills/
+            ├── welcome/                    ← router (OS + funkční stav detekce)
+            ├── install-wsl/
+            ├── setup-ssh/
+            ├── setup-git/
+            ├── install-gh-glab/
+            ├── claude-concepts/
+            ├── install-marketplace/
+            ├── next-steps/
+            └── troubleshoot/
 ```
 
 ## Přizpůsobení pro tvůj tým
 
 1. **Forkni** tento repo.
-2. **Uprav skills** — `setup-git` (tvoje konvence), `setup-ssh` (tvoje služby).
-3. **Uprav `install-marketplace`** — přidej vlastní firemní marketplace URL a pluginy.
-4. **Uprav `next-steps`** — tvoje projekty místo vlastních příkladů.
+2. **Uprav skills** — `setup-git` (týmové konvence), `setup-ssh` (používané služby).
+3. **Uprav `install-marketplace`** — přidej vlastní firemní marketplace URL a pluginy (adaptivní skill už má rozšiřitelnou strukturu).
+4. **Uprav `next-steps`** — odkazy na tvoje projekty.
+5. **Publikuj** — Team admin přidá tvůj fork jako GitHub sync source.
+
+## Lokální dev (pro autora/přispěvatele)
+
+```bash
+claude plugin marketplace add file:///home/avatar/dev/claude-welcome
+claude plugin install dev-onboarding
+claude plugin validate plugins/dev-onboarding
+```
 
 ## Autor
 

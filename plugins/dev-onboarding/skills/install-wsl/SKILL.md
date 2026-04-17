@@ -1,6 +1,6 @@
 ---
 name: install-wsl
-description: "Hloubkový tutoriál pro Windows nováčky — instalace WSL2 + Ubuntu (latest LTS), Unix user setup, VS Code Remote-WSL extension, Claude Code extension v WSL kontextu, přihlášení Claude účtem. Spouštěno v Claude Desktop chatu skrz fetch markdown URL z https://github.com/AndreHeller/claude-code-onboarding. Kolega copy-paste prompt z PROMPT.md, Claude tento skill stáhne a postupuje podle něj."
+description: "ONBOARDING krok pro Windows uživatele — instalace WSL2 + Ubuntu (latest LTS), Unix user setup, VS Code Remote-WSL extension, Claude Code extension v WSL kontextu, přihlášení Claude účtem. Spouštěno primárně z dev-onboarding pluginu v Cowork/Claude Desktop (plugin musí být nainstalovaný jako Installed by default v Team marketplace). Fallback cesta: copy-paste PROMPT.md do Claude Desktop chatu, Claude tento skill fetchne přes URL z https://github.com/AndreHeller/claude-code-onboarding. Auto-invoke JEN v onboarding kontextu: 'jsem na Windows nemám WSL', 'nainstaluj mi WSL pro dev', 'welcome mě poslal na install-wsl', 'onboarding WSL'."
 ---
 
 # Windows dev prostředí setup

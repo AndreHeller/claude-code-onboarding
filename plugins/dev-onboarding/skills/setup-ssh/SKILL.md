@@ -1,6 +1,6 @@
 ---
 name: setup-ssh
-description: "Hloubkový tutoriál pro nového kolegu — co je SSH klíč, jak se liší od hesla / access tokenu / OAuth, kde klíče leží na disku, nejlepší praxe (per-service klíče s SSH config). Provede generací ed25519 klíčů pro GitLab + GitHub, upload public klíčů, test spojení, ssh-agent. Spouští se po WSL setupu jako druhý krok (po welcome). Auto-invoke když user řekne 'nastav mi SSH', 'potřebuju SSH klíč', 'git clone nefunguje'."
+description: "ONBOARDING krok — první SSH setup pro nového kolegu. Hloubkový tutoriál: co je SSH klíč, jak se liší od hesla / access tokenu / OAuth, kde klíče leží na disku, nejlepší praxe (per-service klíče s SSH config). Provede generací ed25519 klíčů pro GitLab + GitHub, upload public klíčů, test spojení, ssh-agent. Auto-invoke JEN při dev onboardingu: 'jsem nový kolega a nastavuji SSH', 'onboarding SSH', 'první SSH klíče pro GitHub/GitLab', 'welcome mě poslal na setup-ssh'. NEVOLAT při běžných dotazech o SSH (např. 'potřebuju další klíč pro server X', 'debug SSH connection') — ty řeší obecné znalosti nebo troubleshoot skill."
 ---
 
 # SSH klíče — co to je a jak je správně nastavit

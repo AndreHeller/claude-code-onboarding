@@ -1,6 +1,6 @@
 ---
 name: setup-git
-description: "Git konfigurace dle týmových konvencí — user.name, user.email (per-repo identity pro firemní vs osobní), pull.rebase=true, pull.ff=only, init.defaultBranch=main. Hloubkové vysvětlení rebase vs merge, lineární vs nelineární historie, fast-forward merge, proč obě pojistky. Spouští se po setup-ssh. Auto-invoke při 'nastav mi git', 'git konvence', 'git config', 'co je rebase'."
+description: "ONBOARDING krok — první git config pro nového kolegu. Nastaví globální user.name, user.email, pull.rebase=true, pull.ff=only, init.defaultBranch=main dle týmových konvencí. Hloubkové vysvětlení rebase vs merge, lineární historie, fast-forward merge, per-repo identity (firemní vs osobní email). Auto-invoke JEN v onboarding kontextu: 'jsem nový kolega, nastav mi git', 'onboarding git config', 'dev onboarding git', 'welcome mě poslal na setup-git'. NEVOLAT při obecných dotazech o gitu nebo rebase — ty řeší obecné znalosti."
 ---
 
 # Git konfigurace — Git konvence (best practices)
