@@ -52,3 +52,13 @@ claude plugin install dev-onboarding
 - **Permission dialogy** — uživatel bude vidět Allow/Deny, to je normální.
 - **Neinstaluj nic bez vysvětlení** — u každého `apt install`, `pip install`, `ssh-keygen` řekni proč.
 - **Funkční > existenční detekce** — pro stav prostředí použij funkční testy (`ssh -T`, `git config --get`, `gh auth status`), ne kontrolu souborů na standardních cestách.
+
+## Git workflow
+
+**Archetyp:** Personal & self-maintained (= open-source na GitHub). Detail v plugin skillu **`bi:git-workflow`** → [`archetype-personal.md`](https://gitlab.com/slevomat/ai/claude-plugin-bi/-/blob/main/skills/git-workflow/references/archetype-personal.md).
+
+**Per-repo specifika:**
+- **Non-Slevomat remote** (= `AndreHeller/claude-code-onboarding` na GitHub) → plugin BI hook `check-git.sh` **silent-pass** (= hook validuje jen Slevomat repos, hobby/open-source repa nechává být).
+- **Single owner** (André), self-merge OK, žádný hard reviewer requirement.
+- **PR workflow přes `gh pr create`** (= GitHub remote, ne `glab`). Pro Slevomat kolegy je viditelnost přes Slevomat Team marketplace (admin GitHub sync), pro externí přes manual marketplace install.
+- **Versioning rozdíl repo vs plugin:** Repo samotný **nemá** version / tagging. **Plugin `dev-onboarding`** uvnitř má vlastní SemVer v [plugins/dev-onboarding/.claude-plugin/plugin.json](plugins/dev-onboarding/.claude-plugin/plugin.json). Distribuovaný artefakt = plugin, ne repo.
