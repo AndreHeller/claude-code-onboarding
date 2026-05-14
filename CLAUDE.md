@@ -24,11 +24,12 @@ Pořadí v routeru welcome:
 2. **`setup-ssh`** — per-service SSH klíče pro GitHub + GitLab. Hloubkový tutoriál.
 3. **`setup-git`** — user.name, user.email, pull.rebase=true, pull.ff=only. Vysvětlí proč.
 4. **`install-gh-glab`** — GitHub CLI + GitLab CLI, auth login.
-5. **`claude-concepts`** — memory vs CLAUDE.md vs skills vs hooks. Kde co leží.
-6. **`install-claude-cli`** — prerekvizita pro marketplace: `claude` CLI binárka v terminálu (VS Code extension ji nevystavuje). Skip pokud `claude --version` prošlo v detekci.
-7. **`install-marketplace`** — adaptivní (welcome router se aktivně zeptá na firmu, nenechává to na iniciativě uživatele).
-8. **`next-steps`** — klonuj první projekt.
-9. **`troubleshoot`** — on-demand, dlouhodobě užitečný (SSH fails, git auth issues, plugin problems).
+5. **`claude-concepts`** — memory vs CLAUDE.md vs skills vs hooks. Kde co leží na disku, co je persistent.
+6. **`plugin-building-blocks`** — z čeho se plugin uvnitř skládá (skill / hook / command / agent / MCP / marketplace). Komplement ke `claude-concepts` — ten řeší storage pohled, tenhle architektonický.
+7. **`install-claude-cli`** — prerekvizita pro marketplace: `claude` CLI binárka v terminálu (VS Code extension ji nevystavuje). Skip pokud `claude --version` prošlo v detekci.
+8. **`install-marketplace`** — adaptivní (welcome router se aktivně zeptá na firmu, nenechává to na iniciativě uživatele).
+9. **`next-steps`** — klonuj první projekt.
+10. **`troubleshoot`** — on-demand, dlouhodobě užitečný (SSH fails, git auth issues, plugin problems).
 
 ## Distribuce
 

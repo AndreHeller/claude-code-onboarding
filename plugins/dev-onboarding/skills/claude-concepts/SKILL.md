@@ -142,4 +142,6 @@ Když Claude odpovídá na tvou zprávu, kombinuje **šest zdrojů informací**:
 
 ## Hotovo, co dál
 
-Rozumíš Claude architektuře. Pokud tvůj tým má **firemní plugin marketplace**, pokračuj na `install-marketplace` (volitelné). Jinak pokračuj na `next-steps` — klonuj svůj projekt.
+Rozumíš Claude architektuře z **storage pohledu** — kde co leží na disku a co je persistent. Pro porozumění **z čeho se plugin uvnitř skládá** (skill / hook / command / agent / MCP server) a kdy co použít, pokračuj na skill [plugin-building-blocks](../plugin-building-blocks/SKILL.md) — komplementární architektonický pohled.
+
+Pokud tvůj tým má **firemní plugin marketplace**, pokračuj na `install-marketplace` (volitelné). Jinak pokračuj na `next-steps` — klonuj svůj projekt.

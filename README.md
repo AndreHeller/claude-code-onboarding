@@ -48,7 +48,8 @@ Kolega, co ještě nemá Claude Code (typicky Windows bez WSL), má **Claude Des
 | `setup-ssh` | per-service SSH klíče pro GitHub + GitLab, hloubkový tutoriál |
 | `setup-git` | user.name/email, pull.rebase=true, pull.ff=only + proč |
 | `install-gh-glab` | GitHub CLI + GitLab CLI, auth login |
-| `claude-concepts` | memory vs CLAUDE.md vs skills vs hooks |
+| `claude-concepts` | memory vs CLAUDE.md vs skills vs hooks (kde co leží na disku) |
+| `plugin-building-blocks` | z čeho se plugin uvnitř skládá (skill, hook, agent, MCP, marketplace) |
 | `install-marketplace` | volitelné, adaptivní (Slevomat BI / generic) |
 | `next-steps` | klonuj první projekt, přepni workspace |
 | `troubleshoot` | on-demand — SSH/git fails, plugin problems, WSL gotchy |
@@ -71,6 +72,7 @@ claude-code-onboarding/
             ├── setup-git/
             ├── install-gh-glab/
             ├── claude-concepts/
+            ├── plugin-building-blocks/
             ├── install-marketplace/
             ├── next-steps/
             └── troubleshoot/
