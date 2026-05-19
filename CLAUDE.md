@@ -1,6 +1,6 @@
 # CLAUDE.md — Dev onboarding repo
 
-Tento repo hostuje **jeden Claude Code plugin `dev-onboarding`** ([plugins/dev-onboarding/](plugins/dev-onboarding/)) pro nové kolegy. Primární distribuce je přes **firemní Claude Team marketplace** (admin org-wide). Fallback cesty: lokální `claude plugin install` nebo copy-paste PROMPT.md v Claude Desktop.
+Tento repo **JE** Claude Code plugin `dev-onboarding` (plugin manifest v [.claude-plugin/plugin.json](.claude-plugin/plugin.json), skills v [skills/](skills/)) pro nové kolegy. Současně slouží jako **marketplace shim** ([.claude-plugin/marketplace.json](.claude-plugin/marketplace.json)) pro individuální install. Primární distribuce je přes **firemní Claude Team marketplace** (admin org-wide, Cowork). Fallback cesty: lokální `claude plugin install` nebo copy-paste PROMPT.md v Claude Desktop.
 
 ## Jak Claude pozná, že má onboardit
 
@@ -40,7 +40,7 @@ Pořadí v routeru welcome:
 ## Lokální dev (pro autora)
 
 ```bash
-claude plugin marketplace add file:///home/avatar/dev/claude-welcome
+claude plugin marketplace add file:///home/avatar/dev/personal/claude-code-onboarding
 claude plugin install dev-onboarding
 ```
 
@@ -61,4 +61,4 @@ claude plugin install dev-onboarding
 - **Non-Slevomat remote** (= `AndreHeller/claude-code-onboarding` na GitHub) → plugin BI hook `check-git.sh` **silent-pass** (= hook validuje jen Slevomat repos, hobby/open-source repa nechává být).
 - **Single owner** (André), self-merge OK, žádný hard reviewer requirement.
 - **PR workflow přes `gh pr create`** (= GitHub remote, ne `glab`). Pro Slevomat kolegy je viditelnost přes Slevomat Team marketplace (admin GitHub sync), pro externí přes manual marketplace install.
-- **Versioning rozdíl repo vs plugin:** Repo samotný **nemá** version / tagging. **Plugin `dev-onboarding`** uvnitř má vlastní SemVer v [plugins/dev-onboarding/.claude-plugin/plugin.json](plugins/dev-onboarding/.claude-plugin/plugin.json). Distribuovaný artefakt = plugin, ne repo.
+- **Versioning:** Repo a plugin žijí v jednom (= plugin manifest je v rootu repa). Plugin má SemVer v [.claude-plugin/plugin.json](.claude-plugin/plugin.json). Release branch konvence (Slevomat marketplace): `release/v<major>` (= aktuálně `release/v1`).

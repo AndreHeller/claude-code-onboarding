@@ -56,26 +56,27 @@ Kolega, co ještě nemá Claude Code (typicky Windows bez WSL), má **Claude Des
 
 ## Struktura repa
 
+Repo je současně **plugin** (`.claude-plugin/plugin.json` + `skills/` v rootu) i **marketplace shim** (`.claude-plugin/marketplace.json` pro individuální install). Cowork strict mode vyžaduje plugin v rootu source repa, ne v podadresáři.
+
 ```
 claude-code-onboarding/
 ├── .claude-plugin/
-│   └── marketplace.json                    ← pro lokální dev (autor) / GitHub sync source
-├── CLAUDE.md                               ← instrukce pro Claude v tomto workspace
-├── PROMPT.md                               ← fallback copy-paste prompt pro Claude Desktop
-└── plugins/
-    └── dev-onboarding/
-        ├── .claude-plugin/plugin.json
-        └── skills/
-            ├── welcome/                    ← router (OS + funkční stav detekce)
-            ├── install-wsl/
-            ├── setup-ssh/
-            ├── setup-git/
-            ├── install-gh-glab/
-            ├── claude-concepts/
-            ├── plugin-building-blocks/
-            ├── install-marketplace/
-            ├── next-steps/
-            └── troubleshoot/
+│   ├── marketplace.json    ← marketplace shim (individual install path)
+│   └── plugin.json         ← plugin manifest (name, version, author)
+├── skills/
+│   ├── welcome/            ← router (OS + funkční stav detekce)
+│   ├── install-wsl/
+│   ├── setup-ssh/
+│   ├── setup-git/
+│   ├── install-gh-glab/
+│   ├── claude-concepts/
+│   ├── plugin-building-blocks/
+│   ├── install-claude-cli/
+│   ├── install-marketplace/
+│   ├── next-steps/
+│   └── troubleshoot/
+├── CLAUDE.md               ← instrukce pro Claude v tomto workspace
+└── PROMPT.md               ← fallback copy-paste prompt pro Claude Desktop
 ```
 
 ## Přizpůsobení pro tvůj tým
@@ -89,9 +90,9 @@ claude-code-onboarding/
 ## Lokální dev (pro autora/přispěvatele)
 
 ```bash
-claude plugin marketplace add file:///home/avatar/dev/claude-welcome
+claude plugin marketplace add file:///home/avatar/dev/personal/claude-code-onboarding
 claude plugin install dev-onboarding
-claude plugin validate plugins/dev-onboarding
+claude plugin validate .
 ```
 
 ## Autor
