@@ -1,13 +1,27 @@
-# OS / editor
+# === OS ===
 .DS_Store
 Thumbs.db
+
+# === IDE / editor ===
+.idea/
+.vscode/
 *.swp
 *.swo
 
-# Claude per-user state
-.claude/settings.local.json
-.claude/scheduled_tasks.lock
+# === Claude per-user state ===
+# Pattern `.claude/*.*` matchuje JEN soubory s příponou v .claude/
+# (ne rekurzivně, ne adresáře). Adresáře (skills/, commands/, agents/, hooks/)
+# zůstávají verzované automaticky.
+#
+# Whitelist `!.claude/settings.json` = jediný soubor s příponou, který chceme
+# verzovat jako team setting (permissions/hooks/env).
+#
+# POZOR: `.claude/*` nebo `.claude/` (bez `.*`) matchuje i adresáře → git
+# kvůli excluded parent directory nesestoupí dovnitř a whitelist by nefungoval
+# (git docs: "not possible to re-include file if parent directory excluded").
+.claude/*.*
+!.claude/settings.json
 
-# Logy / temp
+# === Logy / temp ===
 *.log
 .tmp/
