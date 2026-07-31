@@ -1,11 +1,11 @@
 ---
 name: install-gh-glab
-description: "ONBOARDING krok — první instalace GitHub CLI (gh) a GitLab CLI (glab) v Ubuntu/WSL/macOS. Vysvětluje k čemu slouží, jak se přihlásit přes browser (Token volba, ne SSH), základní commands. Auto-invoke JEN v onboarding kontextu: 'jsem nový kolega, nainstaluj gh glab', 'onboarding gh glab', 'welcome mě poslal na install-gh-glab'. NEVOLAT při pozdějších dotazech typu 'jak funguje gh pr create' — ty zvládne Claude z obecných znalostí."
+description: "ONBOARDING krok — první instalace GitHub CLI (gh) a GitLab CLI (glab) v Ubuntu/WSL/macOS. Vysvětluje k čemu slouží, jak se přihlásit přes browser (Token volba, ne SSH), jak propojit git s gh přes gh auth setup-git, základní commands. Auto-invoke JEN v onboarding kontextu: 'jsem nový kolega, nainstaluj gh glab', 'onboarding gh glab', 'welcome mě poslal na install-gh-glab'. NEVOLAT při pozdějších dotazech typu 'jak funguje gh pr create' — ty zvládne Claude z obecných znalostí."
 ---
 
 # GitHub CLI (gh) a GitLab CLI (glab)
 
-Command-line nástroje pro práci s Git hosting službami **z terminálu** bez nutnosti otevírat browser. Pokud tvůj tým používá GitHub i GitLab, nainstaluj oboje.
+Command-line nástroje pro práci s Git hosting službami **z terminálu** bez nutnosti otevírat browser. `gh` budeš potřebovat téměř jistě (Slevomat i většina open-source žije na GitHubu); `glab` přidej, jen pokud tvůj tým používá i GitLab.
 
 ## Co tyto CLI umí
 
@@ -80,6 +80,24 @@ gh auth status
 #   ✓ Logged in to github.com account <ty> ...
 ```
 
+### gh auth setup-git — nauč git používat token od gh
+
+`gh` a `git` spolu po loginu **nemluví**: `gh` má OAuth token pro API, `git` umí
+tvůj SSH klíč — ale pro **`https://` URL** git potřebuje credential helper,
+který po čisté instalaci nemáš. Bez něj `git clone
+https://github.com/<org>/<privátní-repo>` spadne na
+`could not read Username for 'https://github.com'`, i když máš `gh` přihlášené
+a SSH funkční.
+
+```bash
+gh auth setup-git
+```
+
+Zapíše credential helper do `~/.gitconfig` — git si od té chvíle pro
+`https://github.com/...` bere token od `gh`. SSH cesty
+(`git@github.com:...`) se to nijak nedotkne, jen přibude druhá funkční cesta.
+Vratné smazáním `[credential "https://github.com"]` sekce z `~/.gitconfig`.
+
 ### glab auth login
 
 ```bash
@@ -135,4 +153,4 @@ gh run watch <id>
 
 ## Hotovo, co dál
 
-Máš `gh` i `glab` funkční. Pokračuj na **`/claude-concepts`** — teď je důležité pochopit **Claude architekturu** (memory, CLAUDE.md, skills), než začneš pracovat na projektech. Bez toho budeš v Claude flow tápat.
+Máš `gh` (a případně i `glab`) funkční. Pokračuj na **`/claude-concepts`** — teď je důležité pochopit **Claude architekturu** (memory, CLAUDE.md, skills), než začneš pracovat na projektech. Bez toho budeš v Claude flow tápat.

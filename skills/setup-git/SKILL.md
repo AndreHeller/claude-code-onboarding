@@ -26,14 +26,14 @@ Příkazy:
 
 ## Část 2: Identita — user.name a user.email
 
-Identita se objevuje v **každém commitu** — `git log`, GitLab/GitHub UI, blame, audit trail.
+Identita se objevuje v **každém commitu** — `git log`, GitHub/GitLab UI, blame, audit trail.
 
 ```bash
 git config --global user.name "Tvé Jméno"
 git config --global user.email "your.name@company.com"
 ```
 
-**Důležité**: `user.email` musí být **registrovaný v GitLabu/GitHubu**. Jinak tvé commity budou "unverified" a nepropojí se s tvým profilem.
+**Důležité**: `user.email` musí být **registrovaný na GitHubu/GitLabu**. Jinak tvé commity budou "unverified" a nepropojí se s tvým profilem.
 
 ### Firemní vs osobní email — per-repo override
 
@@ -153,7 +153,7 @@ b7c8d9e Refactor: stg_vouchers CTE naming
 - **Bisect**: binární vyhledávání chyby ("`git bisect` — který commit to rozbil?") funguje přesně, nemusí přeskakovat merge commits.
 - **Revert**: `git revert <hash>` pro libovolný commit je single command, žádný `-m 1` parent confusion.
 - **Blame**: `git blame soubor.sql` ukazuje skutečného autora řádku, ne merge commit.
-- **Code review**: MR diff v GitLabu ukazuje přesně co kolega změnil, bez merge noise.
+- **Code review**: PR diff na GitHubu ukazuje přesně co kolega změnil, bez merge noise.
 
 ## Část 4: `pull.rebase=true` — jak to funguje
 
@@ -276,7 +276,7 @@ git config --global core.editor "code --wait"   # VS Code
 
 Spustím všech 5 příkazů najednou (s tvým permission). **Dřív než spustím**, zeptám se tě na:
 - **Tvé jméno** (jak se chceš zobrazovat v commitech).
-- **Firemní email** (registrovaný v GitLab + GitHub).
+- **Firemní email** (registrovaný na GitHubu + GitLabu).
 
 ```bash
 git config --global user.name "Tvé Jméno"

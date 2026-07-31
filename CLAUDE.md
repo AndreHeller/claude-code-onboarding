@@ -55,7 +55,7 @@ claude plugin install dev-onboarding
 
 ## Git workflow
 
-**Archetyp:** Personal & self-maintained (= open-source na GitHub). Detail v plugin skillu **`bi:git-workflow`** → [`archetype-personal.md`](https://gitlab.com/slevomat/ai/claude-plugin-bi/-/blob/main/skills/git-workflow/references/archetype-personal.md).
+**Archetyp:** Personal & self-maintained (= open-source na GitHub). Detail v plugin skillu **`bi:git-workflow`** → [`archetype-personal.md`](https://github.com/slevomat/claude-plugin-bi/blob/main/skills/git-workflow/references/archetype-personal.md).
 
 **Per-repo specifika:**
 - **Non-Slevomat remote** (= `AndreHeller/claude-code-onboarding` na GitHub) → plugin BI hook `check-git.sh` **silent-pass** (= hook validuje jen Slevomat repos, hobby/open-source repa nechává být).

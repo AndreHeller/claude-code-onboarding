@@ -64,7 +64,7 @@ Pokud `uname -s` vrátilo `Linux` nebo `Darwin` (macOS), jedeme dál. Podle toho
 
 Po zobrazení dashboardu se **aktivně zeptej uživatele** (nenech ho hádat, co je opt-in):
 
-> *"Patříš do firmy, která má vlastní Claude plugin marketplace? Například Slevomat má privátní GitLab marketplace s `bi` pluginem (git-workflow konvence, naming patterns, audit skills). Pokud ano, řekni mi název firmy — nainstalujeme ti org-wide pluginy. Pokud ne nebo nevíš, přeskočíme rovnou na klonování projektu."*
+> *"Patříš do firmy, která má vlastní Claude plugin marketplace? Například Slevomat má privátní GitHub marketplace s `bi` pluginem (git-workflow konvence, naming patterns, audit skills). Pokud ano, řekni mi název firmy — nainstalujeme ti org-wide pluginy. Pokud ne nebo nevíš, přeskočíme rovnou na klonování projektu."*
 
 - **Odpověď = "ano, <firma>"** → pokud detekce ukázala `✗ claude CLI missing`, nejdřív `install-claude-cli`, pak `install-marketplace`.
 - **Odpověď = "ne / nevím / přeskoč"** → rovnou na `next-steps`.
