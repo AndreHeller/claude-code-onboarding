@@ -32,7 +32,7 @@ cd ~/dev
 # Příklady SSH URL (formát — nahraď org/group/repo tím správným):
 # git clone git@github.com:<org>/<repo>.git                     # GitHub obecně
 # git clone git@gitlab.com:<group>/<subgroup>/<projekt>.git     # GitLab obecně
-# git clone git@gitlab.com:slevomat/bi/dbt.git                  # příklad: Slevomat dbt repo
+# git clone git@github.com:slevomat/bi-dbt.git                  # příklad: Slevomat dbt repo
 
 cd <nazev-slozky>   # složka co git clone vytvořil (obvykle = název repa)
 ```

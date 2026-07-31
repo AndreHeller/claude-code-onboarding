@@ -1,6 +1,6 @@
 ---
 name: setup-ssh
-description: "ONBOARDING krok — první SSH setup pro nového kolegu. Hloubkový tutoriál: co je SSH klíč, jak se liší od hesla / access tokenu / OAuth, kde klíče leží na disku, nejlepší praxe (per-service klíče s SSH config). Provede generací ed25519 klíčů pro GitLab + GitHub, upload public klíčů, test spojení, ssh-agent. Auto-invoke JEN při dev onboardingu: 'jsem nový kolega a nastavuji SSH', 'onboarding SSH', 'první SSH klíče pro GitHub/GitLab', 'welcome mě poslal na setup-ssh'. NEVOLAT při běžných dotazech o SSH (např. 'potřebuju další klíč pro server X', 'debug SSH connection') — ty řeší obecné znalosti nebo troubleshoot skill."
+description: "ONBOARDING krok — první SSH setup pro nového kolegu. Hloubkový tutoriál: co je SSH klíč, jak se liší od hesla / access tokenu / OAuth, kde klíče leží na disku, nejlepší praxe (per-service klíče s SSH config). Provede generací ed25519 klíčů pro GitHub + GitLab, upload public klíčů, test spojení, ssh-agent. Auto-invoke JEN při dev onboardingu: 'jsem nový kolega a nastavuji SSH', 'onboarding SSH', 'první SSH klíče pro GitHub/GitLab', 'welcome mě poslal na setup-ssh'. NEVOLAT při běžných dotazech o SSH (např. 'potřebuju další klíč pro server X', 'debug SSH connection') — ty řeší obecné znalosti nebo troubleshoot skill."
 ---
 
 # SSH klíče — co to je a jak je správně nastavit
@@ -21,14 +21,14 @@ Nejstarší. Zadáš username + heslo. Server si pamatuje hash tvého hesla a po
 
 **Analogie**: SSH klíč je jako **fyzický klíč od domu**, ale digitální. Skládá se z dvou částí:
 
-- **Privátní klíč** (`~/.ssh/ed25519_gitlab` nebo podobně) — **zůstává jen na tvém stroji**. Nikdy ho nikomu neukazuj. Jako klíč od sejfu ve tvé kapse.
-- **Veřejný klíč** (`~/.ssh/ed25519_gitlab.pub`) — nahraješ na server (GitLab, GitHub). Je to jako **zámek** vyrobený specificky pro tvůj privátní klíč. Může být klidně veřejný — nejde zpětně spočítat.
+- **Privátní klíč** (`~/.ssh/ed25519_github` nebo podobně) — **zůstává jen na tvém stroji**. Nikdy ho nikomu neukazuj. Jako klíč od sejfu ve tvé kapse.
+- **Veřejný klíč** (`~/.ssh/ed25519_github.pub`) — nahraješ na server (GitHub, GitLab). Je to jako **zámek** vyrobený specificky pro tvůj privátní klíč. Může být klidně veřejný — nejde zpětně spočítat.
 
 Když se chceš přihlásit: server ti pošle náhodný "challenge" text, tvůj stroj ho podepíše privátním klíčem, server ověří podpis veřejným klíčem. Pokud sedí → pustí tě dovnitř. **Nikdo nemusel slyšet heslo.**
 
 **Proč lepší**: pokud ti někdo ukradne `.bashrc` nebo nakoukne do mailu, **SSH klíč neobsahuje**. Ten je jen v `~/.ssh/`, chráněný `chmod 600` permissions. Kompromitace vyžaduje fyzický / root přístup na tvůj stroj.
 
-**Kdy se používá**: `git clone git@gitlab.com:...`, `git push`, SSH do serveru, podpis commitů.
+**Kdy se používá**: `git clone git@github.com:...`, `git push`, SSH do serveru, podpis commitů.
 
 ### 3. Access Token / Personal Access Token (PAT)
 
@@ -218,24 +218,9 @@ chmod 644 ~/.ssh/github.pub ~/.ssh/gitlab.pub ~/.ssh/config
 
 SSH je **striktní** na permissions — pokud privátní klíč má příliš volné permissions (readable pro ostatní), SSH ho odmítne použít.
 
-## Část 5: Upload public klíčů na GitLab + GitHub
+## Část 5: Upload public klíčů na GitHub + GitLab
 
 Musíš nahrát **každý .pub na odpovídající službu**. Privátní klíče (bez `.pub`) NIKDY neukazujeme nikomu.
-
-### Upload do GitLab
-
-```bash
-cat ~/.ssh/gitlab.pub
-```
-
-Zkopíruj celý výstup (od `ssh-ed25519` po email). Pak:
-
-1. Otevři: https://gitlab.com/-/user_settings/ssh_keys
-2. **Key**: vlož public key z `cat ~/.ssh/gitlab.pub`.
-3. **Title**: dej popisný — např. `WSL laptop (GitLab)`.
-4. **Usage type**: `Authentication & Signing` (default).
-5. **Expires at**: **POZOR — GitLab automaticky předvyplní expiraci** (typicky 1 rok). Pokud chceš klíč bez expirace (doporučeno pro dev stroje), **smaž datum z pole** — nech ho prázdné.
-6. **Add key**.
 
 ### Upload do GitHub
 
@@ -243,7 +228,7 @@ Zkopíruj celý výstup (od `ssh-ed25519` po email). Pak:
 cat ~/.ssh/github.pub
 ```
 
-Zkopíruj výstup. Pak:
+Zkopíruj celý výstup (od `ssh-ed25519` po email). Pak:
 
 1. Otevři: https://github.com/settings/keys
 2. **New SSH key**.
@@ -252,13 +237,28 @@ Zkopíruj výstup. Pak:
 5. **Key**: vlož public key z `cat ~/.ssh/github.pub`.
 6. **Add SSH key**.
 
+### Upload do GitLab (jen pokud tvůj tým GitLab používá)
+
+```bash
+cat ~/.ssh/gitlab.pub
+```
+
+Zkopíruj výstup. Pak:
+
+1. Otevři: https://gitlab.com/-/user_settings/ssh_keys
+2. **Key**: vlož public key z `cat ~/.ssh/gitlab.pub`.
+3. **Title**: dej popisný — např. `WSL laptop (GitLab)`.
+4. **Usage type**: `Authentication & Signing` (default).
+5. **Expires at**: **POZOR — GitLab automaticky předvyplní expiraci** (typicky 1 rok). Pokud chceš klíč bez expirace (doporučeno pro dev stroje), **smaž datum z pole** — nech ho prázdné.
+6. **Add key**.
+
 ## Část 6: Test spojení
 
 Ověř že klíč funguje:
 
 ```bash
-ssh -T git@gitlab.com
 ssh -T git@github.com
+ssh -T git@gitlab.com
 ```
 
 ### První spojení — host key fingerprint
@@ -277,14 +277,14 @@ Pokud sedí fingerprint (pro GitLab/GitHub je jich pár, všechny veřejně publ
 
 ### Úspěšný výstup
 
-GitLab:
-```
-Welcome to GitLab, @<tvoje_username>!
-```
-
 GitHub:
 ```
 Hi <tvoje_username>! You've successfully authenticated, but GitHub does not provide shell access.
+```
+
+GitLab:
+```
+Welcome to GitLab, @<tvoje_username>!
 ```
 
 "Does not provide shell access" není chyba — GitHub říká "autentizoval jsi se, ale není co dělat interaktivně, jen git operace". OK.
@@ -325,7 +325,7 @@ fi
 
 ## Část 8: Hotovo, co dál
 
-Pokud oba `ssh -T` testy prošly → **máš SSH funkční**. Můžeš klonovat privátní repa přes `git@gitlab.com:your-org/...` nebo `git@github.com:...`.
+Pokud oba `ssh -T` testy prošly → **máš SSH funkční**. Můžeš klonovat privátní repa přes `git@github.com:your-org/...` nebo `git@gitlab.com:...`.
 
 Pokračuj na **`/setup-git`** — git konfigurace dle týmových konvencí (pull.rebase, commit messages, atd.).
 

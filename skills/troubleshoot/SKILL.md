@@ -12,7 +12,7 @@ Pokud tvůj onboarding nebo dev práce naráží na problém, **tady je seznam n
 ### `Permission denied (publickey)` při `git clone` / `ssh -T`
 
 **Příčiny**:
-1. Public key nenahraný v GitLab / GitHub.
+1. Public key nenahraný na GitHubu / GitLabu.
 2. SSH klíč je jinde než kde SSH klient hledá.
 3. Špatné permissions na `~/.ssh/` souborech.
 4. ssh-agent nepouští klíč (pokud máš passphrase).
@@ -20,8 +20,8 @@ Pokud tvůj onboarding nebo dev práce naráží na problém, **tady je seznam n
 **Fix**:
 
 ```bash
-# 1. Otestuj přímo s verbose flag
-ssh -vT git@gitlab.com
+# 1. Otestuj přímo s verbose flag (host podle služby, kde repo žije)
+ssh -vT git@github.com
 
 # Hledej řádky:
 # "Offering public key" — jaké klíče SSH nabízí
@@ -33,10 +33,10 @@ chmod 600 ~/.ssh/id_ed25519  # privátní
 chmod 644 ~/.ssh/id_ed25519.pub  # veřejný
 chmod 644 ~/.ssh/config
 
-# 3. Ověř že public key je v GitLab/GitHub
+# 3. Ověř že public key je na GitHubu/GitLabu
 cat ~/.ssh/id_ed25519.pub   # zkopíruj výstup
-# GitLab: https://gitlab.com/-/user_settings/ssh_keys
 # GitHub: https://github.com/settings/keys
+# GitLab: https://gitlab.com/-/user_settings/ssh_keys
 
 # 4. ssh-agent pokud máš passphrase
 eval "$(ssh-agent -s)"
@@ -65,14 +65,14 @@ Pokud repo používá HTTPS remote místo SSH:
 ```bash
 # Zkontroluj
 git remote -v
-# origin  https://gitlab.com/your-org/... (push)
+# origin  https://github.com/your-org/... (push)
 
 # Přepni na SSH
-git remote set-url origin git@gitlab.com:your-org/....git
+git remote set-url origin git@github.com:your-org/....git
 
 # Ověř
 git remote -v
-# origin  git@gitlab.com:your-org/... (push)
+# origin  git@github.com:your-org/... (push)
 ```
 
 ## Claude Code extension
@@ -99,9 +99,13 @@ git remote -v
 
 ### Plugin install selže s `Permission denied (publickey)`
 
-**Příčina**: plugin repo je v privátním GitLabu, SSH key nenalezen.
+**Příčina**: plugin repo je privátní (Slevomat marketplace i plugin repa žijí
+na GitHubu v organizaci `slevomat`) a SSH key nenalezen — nebo ti chybí
+členství v organizaci.
 
-**Fix**: dokonči `/setup-ssh` nejdřív, ověř `ssh -T git@gitlab.com`, pak opakuj install.
+**Fix**: dokonči `/setup-ssh` nejdřív, ověř `ssh -T git@github.com`, pak opakuj
+install. Pokud SSH funguje a install dál padá, zkontroluj, že jsi přijal
+pozvánku do GitHub organizace (github.com → ikona profilu → Your organizations).
 
 ### `/plugin list` neznámý příkaz
 
