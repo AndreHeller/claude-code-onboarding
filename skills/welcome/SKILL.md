@@ -51,12 +51,36 @@ ssh_check github.com GitHub
 # GitLab jen pri odpovedi z Kroku 0 — jinak tento radek vubec nespoustej
 ssh_check gitlab.com GitLab
 
+# 2b. SSH KVALITA — per-service klice, nebo jeden univerzalni?
+if [ -f ~/.ssh/config ] && grep -qE '^[[:space:]]*Host[[:space:]]+github\.com' ~/.ssh/config \
+   && grep -qE '^[[:space:]]*IdentityFile' ~/.ssh/config; then
+  echo "✓ SSH per-service klíče (~/.ssh/config s IdentityFile)"
+else
+  echo "~ SSH funguje, ale bez per-service klíčů — jeden klíč pro všechny služby"
+fi
+
 # 3. Git config
 git config --get user.email 2>/dev/null && echo "✓ git user.email set" || echo "✗ git user.email"
 git config --get pull.rebase 2>/dev/null | grep -q true && echo "✓ pull.rebase=true" || echo "✗ pull.rebase"
 
+# 3b. Git KVALITA — pojistky a rozdelena identita
+[ "$(git config --global --get pull.ff)" = "only" ] \
+  && echo "✓ pull.ff=only" || echo "~ pull.ff nenastaveno — chybí pojistka proti merge commitu"
+[ "$(git config --global --get init.defaultBranch)" = "main" ] \
+  && echo "✓ init.defaultBranch=main" || echo "~ init.defaultBranch není main"
+git config --global --get-regexp '^includeif' >/dev/null 2>&1 \
+  && echo "✓ identita rozdělená přes includeIf" \
+  || echo "~ jedna identita pro všechna repa (řeš, jen když máš i osobní projekty)"
+
 # 4. GitHub + GitLab CLI
 gh auth status 2>&1 | grep -q "Logged in" && echo "✓ gh OK" || echo "✗ gh"
+
+# 4b. gh KVALITA — umi git pouzit token od gh pro https URL?
+if gh auth status 2>&1 | grep -q "Logged in"; then
+  git config --global --get-regexp 'credential\..*github.*helper' >/dev/null 2>&1 \
+    && echo "✓ gh credential helper pro https" \
+    || echo "~ gh přihlášené, ale git neumí https — chybí gh auth setup-git"
+fi
 # glab taktez jen pri GitLabu
 glab auth status 2>&1 | grep -q "Logged in" && echo "✓ glab OK" || echo "✗ glab"
 
@@ -82,7 +106,38 @@ v dashboardu jako samostatný řádek (`Spravované dotfiles: ~/.gitconfig →
 cesty v home by upravil trackovaný soubor v tom repu. Postup viz
 [managed-dotfiles.md](references/managed-dotfiles.md).
 
-## Krok 2: Routing — kam dál
+## Krok 2: Dashboard — tři stavy, ne dva
+
+Detekce rozlišuje **tři** stavy, ne jen „má / nemá":
+
+| Stav | Význam | Co s tím |
+|---|---|---|
+| `✗` | chybí | plná cesta příslušným skillem |
+| `~` | funguje, ale jinak, než doporučujeme | viz souhrnný dotaz níže |
+| `✓` | odpovídá doporučení | přeskočit |
+
+**Proč to rozlišení existuje:** zkušený kolega má SSH i git nastavené, takže
+by při binárním `✓/✗` prošel celým onboardingem bez jediné zastávky — a nikdy
+by se nedozvěděl o per-service klíčích, `pull.ff` pojistce ani o rozdělené
+identitě. Stav `~` je přesně ten případ.
+
+**`~` není chyba.** Kolega může mít vlastní setup z dobrého důvodu (config
+repo, firemní politika, zvyk z jiné práce). Dashboard to popisuje neutrálně:
+co má a co by doporučené nastavení přidalo — ne „máš to špatně".
+
+### Souhrnný dotaz na konci
+
+Po vypsání dashboardu, **jen pokud je aspoň jeden řádek `~`**, se zeptej
+**jednou za všechny**:
+
+> *"Tyhle věci máš nastavené jinak, než doporučujeme: <výčet>. Chceš je projít,
+> nebo je necháme být a půjdeme dál?"*
+
+Neptej se u každého bodu zvlášť a nevracej se k tomu podruhé. Když kolega
+odmítne, pokračuj a víc to nezmiňuj. Když souhlasí, projdi jen dotčené skilly
+— každý má sekci **„Už to máš, ale jinak"** s tím, co doporučení přidává.
+
+## Krok 3: Routing — kam dál
 
 Podle výstupu detekce rozhodnu, kterou cestou tě povedu.
 
@@ -99,6 +154,7 @@ Pokud `uname -s` vrátilo `Linux` nebo `Darwin` (macOS), jedeme dál. Podle toho
 | Chybí | Další skill |
 |---|---|
 | ✗ SSH (GitHub, případně GitLab) | `setup-ssh` |
+| `~` cokoli (a kolega souhlasil s projitím) | příslušný skill, sekce „Už to máš, ale jinak" |
 | ✗ git user.email / pull.rebase | `setup-git` |
 | ✗ gh (`glab` jen při GitLabu) | `install-gh-glab` |
 | nikdy jsi nepoužil Claude Code | `claude-concepts` |

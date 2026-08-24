@@ -134,6 +134,23 @@ Doporučujeme **per-service klíče** jako standard — každá služba (GitHub,
 
 Dál v tomto skillu **postupujeme podle Školy B** (per-service). Pokud chceš jednodušší variantu (jeden klíč pro vše), řekni a přepnu na Školu A.
 
+## Už to máš, ale jinak (stav `~` z detekce)
+
+Když SSH autentizuje, ale `~/.ssh/config` nemá per-service `IdentityFile`,
+znamená to, že jeden klíč obsluhuje všechny služby. **Funguje to** — tohle není
+oprava chyby, ale nabídka.
+
+| Máš | Doporučené | Co tím získáš |
+|---|---|---|
+| jeden klíč pro GitHub, GitLab i servery | klíč per služba + `~/.ssh/config` | kompromitace jednoho klíče se netýká ostatních; klíč pro jednu službu odvoláš bez dopadu na zbytek |
+
+Migrace **nevyžaduje smazat stávající klíč**: vygeneruj nový per-service klíč
+(Část 4), nahraj ho, ověř spojení, a teprve pak starý klíč ze služby odeber.
+Do té doby fungují oba.
+
+Kolega může mít dobrý důvod zůstat u jednoho klíče (správa přes 1Password nebo
+jiného agenta, firemní politika). **Nabídni, netlač** — když odmítne, pokračuj.
+
 ## Část 4: Praktický setup — generace per-service klíčů
 
 Zkontroluj nejdřív co už máš:

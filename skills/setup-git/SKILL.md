@@ -317,6 +317,21 @@ git config --global core.editor "code --wait"   # VS Code
 
 `--wait` flag u VS Code = terminál čeká až zavřeš editor tab, pak pokračuje s commitem. Bez něj Git okamžitě commitne s prázdnou zprávou.
 
+## Už to máš, ale jinak (stav `~` z detekce)
+
+Git může být nastavený a přesto postrádat části, které doporučujeme. Projdi jen
+ty řádky, které detekce označila `~`:
+
+| Chybí | Co to dělá | Bez toho |
+|---|---|---|
+| `pull.ff=only` | zastaví `git pull`, který by musel vyrobit merge commit | merge commity prolezou tiše, když někdo obejde `pull.rebase` |
+| `init.defaultBranch=main` | nová repa startují na `main` | část rep vznikne na `master`, nesoulad s remote |
+| `includeIf` | přepne identitu podle složky | jedna adresa ve všech commitech — firemní i v osobních projektech, nebo naopak |
+
+Každý řádek je samostatné rozhodnutí; nastav jen to, co kolega chce. `includeIf`
+má smysl **jen** když má na stroji dvě identity — když dělá výhradně firemní
+práci, je to zbytečná komplikace.
+
 ## Část 8: Aplikace
 
 Spustím všech 5 příkazů najednou (s tvým permission). **Dřív než spustím**, zeptám se tě na:

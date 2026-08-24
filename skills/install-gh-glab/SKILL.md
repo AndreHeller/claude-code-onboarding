@@ -144,6 +144,22 @@ Ověř:
 glab auth status
 ```
 
+## Už to máš, ale jinak (stav `~` z detekce)
+
+Nejčastější případ: `gh` je přihlášené, ale chybí credential helper. Detekce to
+hlásí jako `~ gh přihlášené, ale git neumí https`.
+
+Projeví se to až ve chvíli, kdy něco klonuješ přes `https://` URL místo SSH —
+typicky když zkopíruješ odkaz z prohlížeče nebo tě na něj pošle CI skript. `git`
+se zeptá na uživatelské jméno a spadne na `could not read Username`, i když máš
+`gh` přihlášené a SSH funkční. Řešení je jednorázové:
+
+```bash
+gh auth setup-git
+```
+
+Detail v sekci `gh auth setup-git` níže.
+
 ## Časté commands (krátký cheat sheet)
 
 ```bash
