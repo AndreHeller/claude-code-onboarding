@@ -34,19 +34,49 @@ Slevomat má privátní marketplace na GitHubu s pluginem `bi` (git workflow kon
 Instalace přes Claude Code CLI v terminálu:
 
 ```bash
-# 1. Registrace Slevomat marketplace
+# 1. Registrace marketplace
 claude plugin marketplace add git@github.com:slevomat/claude-marketplace.git
+```
 
-# 2. Instalace bi pluginu
+**Jméno marketplace není jméno repa.** Registruješ URL
+`slevomat/claude-marketplace`, ale marketplace se jmenuje **`slevomat-ai`** —
+jméno se bere z pole `name` v jeho `marketplace.json`. Příkaz `add` ho na konci
+vypíše (`Successfully added marketplace: slevomat-ai`); kdykoli později ho
+zjistíš přes `claude plugin marketplace list`. Instalační syntax je
+`<plugin>@<jméno-marketplace>`, takže překlep to není.
+
+```bash
+# 2. Co katalog nabizi a co uz je nactene
+claude plugin marketplace list
+claude plugin list
+```
+
+**Neinstaluj naslepo.** Katalog obsahuje víc pluginů a u některých dvě varianty:
+`x` (HTTPS origin, pro Cowork / claude.ai) a `x-cli` (SSH origin, pro instalaci
+z terminálu). Část pluginů navíc může být **už načtená z desktopové aplikace**,
+která si je spravuje ve vlastním úložišti. Když takový plugin nainstaluješ ještě
+přes CLI, vznikne **druhá spravovaná kopie** — obě se aktualizují nezávisle a
+časem se rozejdou.
+
+Postup: porovnej katalog s tím, co už je načtené, a instaluj **jen to, co
+chybí**. Když si kolega o nějaký plugin řekne a už ho má odjinud, řekni mu to
+a domluvte se, které místo je nadále to hlavní.
+
+```bash
+# 3. Instalace bi pluginu (pokud jeste neni)
 claude plugin install bi@slevomat-ai
 ```
 
-Po restartu VS Code jsou skills z bi pluginu dostupné:
-- **`git-workflow`** — Slevomat git konvence + git config audit.
-- **`naming-conventions`** — Slevomat BI naming patterns.
-- **`update-check`** — auto-detekce aktualizací (1× za 24h).
+Po restartu VS Code jsou skills z `bi` pluginu dostupné. **Vypiš, co plugin
+reálně nabízí**, místo abys spoléhal na seznam v této dokumentaci — sada skillů
+se mění a natvrdo psaný výčet zastarává:
 
-Ověření: napiš Claude *"jaké git konvence používáme?"* — měl by citovat z `git-workflow` skill.
+```bash
+ls ~/.claude/plugins/cache/slevomat-ai/bi/*/skills/
+```
+
+Ověření: napiš Claude *"jaké git konvence používáme?"* — měl by citovat ze
+skillu `git-workflow`.
 
 ### Pokud odpověď = **jiná firma** nebo **žádná**
 

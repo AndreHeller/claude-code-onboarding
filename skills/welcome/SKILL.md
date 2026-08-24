@@ -31,9 +31,25 @@ echo "WSL_DISTRO_NAME=${WSL_DISTRO_NAME:-(none)}"
 echo "shell=$SHELL"
 
 # 2. SSH — funkční test (NE existenční — každý má klíče pojmenované jinak)
-ssh -T -o ConnectTimeout=5 -o StrictHostKeyChecking=no git@github.com 2>&1 | grep -qE "successfully authenticated|Hi .+!" && echo "✓ GitHub SSH OK" || echo "✗ GitHub SSH"
+# Rozlisuj PRICINU selhani — "nefunguje" muze byt klic, sit, nebo known_hosts
+ssh_check() {   # $1 = host, $2 = popis
+  OUT=$(ssh -T -o ConnectTimeout=5 -o StrictHostKeyChecking=accept-new "git@$1" 2>&1)
+  case "$OUT" in
+    *"successfully authenticated"*|*"Welcome to GitLab"*)
+      echo "✓ $2 SSH OK" ;;
+    *"Permission denied"*)
+      echo "✗ $2 SSH — klíč chybí nebo není nahraný na účtu" ;;
+    *"Could not resolve"*|*"timed out"*|*"Connection refused"*)
+      echo "✗ $2 SSH — síť nebo proxy, ne klíč" ;;
+    *"Host key verification failed"*)
+      echo "✗ $2 SSH — known_hosts nesouhlasí (rotace klíče serveru, nebo MitM)" ;;
+    *)
+      echo "✗ $2 SSH — neznámý stav: $OUT" ;;
+  esac
+}
+ssh_check github.com GitHub
 # GitLab jen pri odpovedi z Kroku 0 — jinak tento radek vubec nespoustej
-ssh -T -o ConnectTimeout=5 -o StrictHostKeyChecking=no git@gitlab.com 2>&1 | grep -qE "Welcome to GitLab" && echo "✓ GitLab SSH OK" || echo "✗ GitLab SSH"
+ssh_check gitlab.com GitLab
 
 # 3. Git config
 git config --get user.email 2>/dev/null && echo "✓ git user.email set" || echo "✗ git user.email"
