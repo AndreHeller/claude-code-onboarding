@@ -60,6 +60,11 @@ claude --version
 - **Pokud vrátí verzi** (např. `2.1.114 (Claude Code)`) → PATH OK, přeskoč na Krok 3.
 - **Pokud `command not found`** → PATH neobsahuje `~/.local/bin`. Fix:
 
+> **Než zapíšeš**: pokud `welcome` ohlásil spravované dotfiles (nebo
+> `[ -L ~/.bashrc ]` vrátí true), postupuj podle
+> [managed-dotfiles.md](../welcome/references/managed-dotfiles.md) — zápis do
+> cesty v home by upravil trackovaný soubor v config repu.
+
 ```bash
 echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
 source ~/.bashrc

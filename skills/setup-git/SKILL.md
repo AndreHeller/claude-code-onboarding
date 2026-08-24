@@ -278,6 +278,11 @@ Spustím všech 5 příkazů najednou (s tvým permission). **Dřív než spust�
 - **Tvé jméno** (jak se chceš zobrazovat v commitech).
 - **Firemní email** (registrovaný na GitHubu + GitLabu).
 
+> **Než zapíšeš**: pokud `welcome` ohlásil spravované dotfiles (nebo
+> `[ -L ~/.gitconfig ]` vrátí true), postupuj podle
+> [managed-dotfiles.md](../welcome/references/managed-dotfiles.md) — zápis do
+> cesty v home by upravil trackovaný soubor v config repu.
+
 ```bash
 git config --global user.name "Tvé Jméno"
 git config --global user.email "your.name@company.com"

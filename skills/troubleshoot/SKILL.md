@@ -176,6 +176,10 @@ git config --local --unset pull.rebase
 git config --global pull.ff only
 ```
 
+Pokud je `~/.gitconfig` symlink (`[ -L ~/.gitconfig ]`), zapisuj do config repa,
+ne přes `git config --global` — viz
+[managed-dotfiles.md](../welcome/references/managed-dotfiles.md).
+
 ## Obecné
 
 ### Claude mi nechce něco udělat — říká "nemám permission"

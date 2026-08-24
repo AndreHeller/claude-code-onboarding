@@ -32,9 +32,24 @@ glab auth status 2>&1 | grep -q "Logged in" && echo "✓ glab OK" || echo "✗ g
 # 5. Claude Code CLI binárka v terminálu (≠ VS Code extension!)
 claude --version 2>/dev/null | head -1 && echo "✓ claude CLI OK" || echo "✗ claude CLI missing"
 
-# 6. Claude plugin marketplace (funguje jen pokud je CLI nainstalované)
+# 6. Spravovane dotfiles — symlinky do config repa (dulezite pred jakymkoli zapisem)
+DOTFILES_MANAGED=0
+for f in ~/.gitconfig ~/.gitconfig-* ~/.ssh/config ~/.bashrc ~/.zshrc; do
+  [ -L "$f" ] && { echo "SYMLINK  $f -> $(readlink "$f")"; DOTFILES_MANAGED=1; }
+done
+[ "$DOTFILES_MANAGED" = 1 ] || echo "✓ žádné spravované dotfiles (zapisuje se přímo)"
+
+# 7. Claude plugin marketplace (funguje jen pokud je CLI nainstalované)
 claude plugin marketplace list 2>/dev/null | head -5 || echo "(žádné custom marketplaces, nebo CLI chybí)"
 ```
+
+### Když detekce ohlásí `SYMLINK`
+
+Config soubory jsou spravované z git repa a v home jsou jen odkazy. Uveď to
+v dashboardu jako samostatný řádek (`Spravované dotfiles: ~/.gitconfig →
+~/config-git/`) a **předej tuto informaci do všech dalších kroků** — zápis do
+cesty v home by upravil trackovaný soubor v tom repu. Postup viz
+[managed-dotfiles.md](references/managed-dotfiles.md).
 
 ## Krok 2: Routing — kam dál
 
