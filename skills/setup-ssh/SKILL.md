@@ -173,6 +173,11 @@ Doporučení pro start: **prázdné** (simpler). Později můžeš přepnout na 
 
 Bez configue by SSH nevěděl který klíč pro který server (protože klíče se nejmenují default `id_ed25519`). Vytvoř `~/.ssh/config`:
 
+> **Než zapíšeš**: pokud `welcome` ohlásil spravované dotfiles (nebo
+> `[ -L ~/.ssh/config ]` vrátí true), postupuj podle
+> [managed-dotfiles.md](../welcome/references/managed-dotfiles.md) — zápis do
+> cesty v home by upravil trackovaný soubor v config repu.
+
 ```bash
 cat > ~/.ssh/config << 'EOF'
 Host github.com

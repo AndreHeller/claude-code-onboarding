@@ -18,9 +18,15 @@ Command-line nástroje pro práci s Git hosting službami **z terminálu** bez n
 
 Pro dev flow zbytečně ušetří spoustu alt-tab mezi IDE a browserem.
 
-## Instalace v Ubuntu
+## Instalace
 
-### gh (GitHub CLI)
+Nejdřív zjisti platformu — recepty se liší:
+
+```bash
+uname -s    # Darwin = macOS (Homebrew) · Linux = Ubuntu/WSL (apt)
+```
+
+### gh (GitHub CLI) — Ubuntu / WSL
 
 GitHub doporučuje **oficiální apt repository**:
 
@@ -39,9 +45,33 @@ Ověření:
 gh --version
 ```
 
-### glab (GitLab CLI)
+### gh (GitHub CLI) — macOS
 
-Dvě cesty:
+```bash
+brew install gh
+gh --version
+```
+
+Pokud `brew` chybí, nainstaluj nejdřív Homebrew podle [brew.sh](https://brew.sh).
+Po instalaci ověř `brew --version` — když příkaz není k nalezení, chybí PATH:
+Homebrew leží na **Apple Siliconu** v `/opt/homebrew`, na **Intelu**
+v `/usr/local`, a instalátor na konci vypíše přesný `eval` řádek pro tvůj
+shell config. To je nejčastější důvod, proč `brew` po instalaci „není".
+
+### glab (GitLab CLI) — jen když tým GitLab používá
+
+> **Přeskoč celou tuhle sekci**, pokud vaše repa žijí jen na GitHubu. `glab`
+> bez GitLabu je jen nepoužívaná binárka a `glab auth login` nemá kam se
+> přihlásit. Když si nejsi jistý, zeptej se team-leada, jestli tým má něco
+> na GitLabu.
+
+**macOS:**
+```bash
+brew install glab
+glab --version
+```
+
+**Ubuntu / WSL** — dvě cesty:
 
 **Přes apt** (pokud GitLab má pro tvé Ubuntu):
 ```bash
@@ -98,7 +128,7 @@ Zapíše credential helper do `~/.gitconfig` — git si od té chvíle pro
 (`git@github.com:...`) se to nijak nedotkne, jen přibude druhá funkční cesta.
 Vratné smazáním `[credential "https://github.com"]` sekce z `~/.gitconfig`.
 
-### glab auth login
+### glab auth login (jen při GitLabu)
 
 ```bash
 glab auth login

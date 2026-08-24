@@ -47,7 +47,42 @@ cd <nazev-slozky>   # složka co git clone vytvořil (obvykle = název repa)
 
 **Pokud clone selže s `Permission denied (publickey)`**: SSH key není registrovaný na té platformě, nebo není v ssh-agent. Spusť skill **`troubleshoot`**.
 
+**Kam klonuješ, rozhoduje o identitě.** Pokud sis v `setup-git` nastavil
+`includeIf`, email se vybírá podle **umístění klonu**, ne podle remote. Klon
+firemního repa do složky, kterou pravidlo nepokrývá, dostane default identitu —
+a commity se nespárují s účtem, se kterým mají. Hned po klonování ověř:
+
+```bash
+git config user.email    # odpovídá typu projektu?
+```
+
+Když nesedí, buď repo přesuň do pokryté složky, nebo mu identitu nastav lokálně
+(`git config user.email …` bez `--global`).
+
 ### 2. Otevři ve VS Code
+
+Nejdřív ověř, že `code` shim v PATH vůbec je — na čerstvém macOS typicky
+**není**, i když je VS Code nainstalovaný:
+
+```bash
+command -v code || echo "code shim chybi"
+```
+
+**Pokud chybí (macOS):** v VS Code `Cmd+Shift+P` → *Shell Command: Install
+'code' command in PATH*. To je oficiální cesta a shim se sám udržuje při
+aktualizacích. Ruční alternativa, když paletu použít nechceš:
+
+```bash
+export PATH="/Applications/Visual Studio Code.app/Contents/Resources/app/bin:$PATH"
+```
+
+(Trvale pak stejným řádkem do rc souboru svého shellu — viz `install-claude-cli`,
+Krok 2.)
+
+**Na WSL / Linuxu** shim přichází s integrací VS Code, takže tam obvykle jen
+ověříš, že odpovídá.
+
+Pak otevři workspace:
 
 ```bash
 code .
