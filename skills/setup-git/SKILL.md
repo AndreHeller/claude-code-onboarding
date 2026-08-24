@@ -30,14 +30,14 @@ Identita se objevuje v **každém commitu** — `git log`, GitHub/GitLab UI, bla
 
 ```bash
 git config --global user.name "Tvé Jméno"
-git config --global user.email "your.name@company.com"
+git config --global user.email "tvuj@email.cz"
 ```
 
 **Důležité**: `user.email` musí být **registrovaný na GitHubu/GitLabu**. Jinak tvé commity budou "unverified" a nepropojí se s tvým profilem.
 
 ### Firemní vs osobní email — per-repo override
 
-**Problém**: nastavíš global `your.name@company.com`. Teď **všechny** commity na tomhle stroji — i do osobních projektů na GitHubu — budou podepsané firemním emailem. To nechceš.
+**Problém**: `user.email` je jeden, ale identity máš dvě. Ať do globalu dáš cokoli, **všechny** commity na stroji ponesou tutéž adresu — firemní i v osobních projektech, nebo osobní i ve firemních. Ani jedno nechceš.
 
 **Řešení 1** — ruční override v konkrétním repu:
 
@@ -51,27 +51,72 @@ Tohle repo bude mít osobní email, zbytek firemní. Ale musíš to udělat **ru
 
 **Řešení 2** — automatické per-folder pravidlo (elegantnější):
 
+Global drží jednu identitu jako default, `includeIf` ji přepíše ve vyjmenovaných
+složkách. Jsou dvě možnosti, kterou identitu udělat defaultní — **vyber podle
+toho, co ti víc sedí**, obě jsou v praxi používané.
+
+**Varianta A — firemní jako default:**
+
 ```ini
 # ~/.gitconfig
-
 [user]
     name = Tvé Jméno
-    email = your.name@company.com    # default = firemní
+    email = your.name@company.com        # default = firemní
 
-# Pokud repo je v ~/personal/, použij osobní email
-[includeIf "gitdir:~/personal/"]
+[includeIf "gitdir/i:~/personal/"]       # osobní složka přepíše
     path = ~/.gitconfig-personal
 ```
 
+**Varianta B — osobní jako default:**
+
 ```ini
-# ~/.gitconfig-personal (vytvoř ručně)
+# ~/.gitconfig
 [user]
-    email = personal@email.com
+    name = Tvé Jméno
+    email = tvuj.osobni@email.cz         # default = osobní
+
+[includeIf "gitdir/i:~/dev/firma/"]      # firemní složky přepíší
+    path = ~/.gitconfig-firma
 ```
 
-Výsledek: **vše v `~/dev/` (firemní)** → automaticky firemní email. **Vše v `~/personal/`** → automaticky osobní email. Nula manuální práce po setupu.
+Přepisující soubor obsahuje jen ten jeden klíč:
 
-**Tip**: global = firemní (`@company.com`). Per-repo nebo conditional include = osobní. Většina práce je firemní, tak firemní jako default dává smysl.
+```ini
+# ~/.gitconfig-personal (resp. ~/.gitconfig-firma)
+[user]
+    email = ta-druha@adresa.cz
+```
+
+### Čím se varianty liší
+
+Ne pohodlím — v obou případech je po setupu nulová manuální práce. Liší se tím,
+**co se stane, když pravidlo nesedne**: překlep v cestě, klon do nepokryté
+složky, nová složka, kterou nikdo do configu nedopsal.
+
+| Default | Když pravidlo nesedne | Následek |
+|---|---|---|
+| A firemní | osobní repo dostane firemní email | firemní adresa zůstane v public historii cizího projektu |
+| B osobní | firemní repo dostane osobní email | commit se nespáruje s pracovním účtem |
+
+První se opravuje přepisem historie, druhý jedním `git config user.email`.
+Varianta A je zvyk u lidí, kteří na stroji dělají téměř jen firemní práci;
+varianta B u těch, kdo mají osobních projektů srovnatelně. **Zeptej se kolegy,
+kterou chce**, nepředpokládej.
+
+Pokud osobní projekty na stroji vůbec nemáš, `includeIf` nepotřebuješ — stačí
+global s firemní adresou.
+
+### `gitdir/i:` versus `gitdir:`
+
+Používej **`gitdir/i:`**, tedy case-insensitive variantu. Na macOS a Windows je
+filesystem case-insensitive, takže `cd ~/dev` i `cd ~/Dev` fungují — ale git
+porovnává pattern **textově**. Když má člověk složku `Dev` a v configu `~/dev`,
+pravidlo se nikdy nechytne a **nikdo si toho nevšimne**: commity tiše dostanou
+default identitu.
+
+Na Linuxu je FS case-sensitive, tam je `gitdir:` přesnější a `/i` by teoreticky
+chytilo i jinou složku, kdyby existovaly `~/dev` a `~/Dev` zvlášť. Krajní
+případ; pro onboarding je `/i` bezpečnější volba.
 
 ## Část 3: Co je lineární vs nelineární historie (a proč na tom záleží)
 
@@ -276,7 +321,11 @@ git config --global core.editor "code --wait"   # VS Code
 
 Spustím všech 5 příkazů najednou (s tvým permission). **Dřív než spustím**, zeptám se tě na:
 - **Tvé jméno** (jak se chceš zobrazovat v commitech).
-- **Firemní email** (registrovaný na GitHubu + GitLabu).
+- **Který email má být default** — a jestli budeš mít na stroji i druhou
+  identitu. Pokud ano, vyber variantu podle Části 2 (firemní nebo osobní jako
+  default); global dostane tu defaultní a druhá se doplní přes `includeIf`
+  v Části 10. Adresa musí být registrovaná na účtu, ke kterému se mají commity
+  párovat.
 
 > **Než zapíšeš**: pokud `welcome` ohlásil spravované dotfiles (nebo
 > `[ -L ~/.gitconfig ]` vrátí true), postupuj podle
@@ -285,7 +334,7 @@ Spustím všech 5 příkazů najednou (s tvým permission). **Dřív než spust�
 
 ```bash
 git config --global user.name "Tvé Jméno"
-git config --global user.email "your.name@company.com"
+git config --global user.email "tvuj@email.cz"      # ta defaultni
 git config --global pull.rebase true
 git config --global pull.ff only
 git config --global init.defaultBranch main
@@ -300,7 +349,7 @@ git config --global --list | grep -E "user|pull|init"
 Očekávaný výstup:
 ```
 user.name=Tvé Jméno
-user.email=your.name@company.com
+user.email=tvuj@email.cz
 pull.rebase=true
 pull.ff=only
 init.defaultBranch=main
@@ -315,7 +364,7 @@ cat ~/.gitconfig
 ```ini
 [user]
     name = Tvé Jméno
-    email = your.name@company.com
+    email = tvuj@email.cz
 [pull]
     rebase = true
     ff = only
@@ -329,9 +378,12 @@ Jednoduchý INI formát. Můžeš **editovat přímo** (VS Code, nano), ale `git
 
 Pokud máš na stejném stroji **firemní i osobní projekty** a chceš **automaticky** přepínat email:
 
+Vyber variantu podle Části 2 (firemní nebo osobní jako default) a přidej
+odpovídající pravidlo. Příklad pro firemní default:
+
 ```ini
 # ~/.gitconfig — přidej na konec:
-[includeIf "gitdir:~/personal/"]
+[includeIf "gitdir/i:~/personal/"]
     path = ~/.gitconfig-personal
 ```
 
@@ -343,7 +395,28 @@ cat > ~/.gitconfig-personal << 'EOF'
 EOF
 ```
 
-Výsledek: vše v `~/dev/` → automaticky `@company.com`. Vše v `~/personal/` → automaticky osobní email. Nula manuální práce.
+Výsledek: vše v `~/dev/` → default identita. Vše v `~/personal/` → osobní email.
+Nula manuální práce.
+
+### Ověř, že pravidlo skutečně zabírá
+
+`includeIf` je snadné napsat tak, že se nikdy nechytne (překlep v cestě, chybějící
+lomítko na konci, case mismatch). Konfigurace přitom vypadá správně a git
+nehlásí nic. **Netvrď, že to funguje, dokud to neuvidíš** — otestuj to
+dočasnými repy:
+
+```bash
+for d in ~/dev ~/personal; do
+    T="$d/_identity_test_$$"
+    mkdir -p "$T" && git -C "$T" init -q \
+        && printf '%-20s -> %s\n' "$d" "$(git -C "$T" config user.email)"
+    rm -rf "$T"
+done
+```
+
+Každá cesta musí vypsat email, který u ní očekáváš. Když obě vypíší tentýž,
+pravidlo nesedí — zkontroluj cestu v `includeIf` (včetně koncového lomítka)
+a jestli má být `gitdir/i:`.
 
 ## Část 11: Hotovo, co dál
 

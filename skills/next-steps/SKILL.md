@@ -47,6 +47,18 @@ cd <nazev-slozky>   # složka co git clone vytvořil (obvykle = název repa)
 
 **Pokud clone selže s `Permission denied (publickey)`**: SSH key není registrovaný na té platformě, nebo není v ssh-agent. Spusť skill **`troubleshoot`**.
 
+**Kam klonuješ, rozhoduje o identitě.** Pokud sis v `setup-git` nastavil
+`includeIf`, email se vybírá podle **umístění klonu**, ne podle remote. Klon
+firemního repa do složky, kterou pravidlo nepokrývá, dostane default identitu —
+a commity se nespárují s účtem, se kterým mají. Hned po klonování ověř:
+
+```bash
+git config user.email    # odpovídá typu projektu?
+```
+
+Když nesedí, buď repo přesuň do pokryté složky, nebo mu identitu nastav lokálně
+(`git config user.email …` bez `--global`).
+
 ### 2. Otevři ve VS Code
 
 Nejdřív ověř, že `code` shim v PATH vůbec je — na čerstvém macOS typicky
