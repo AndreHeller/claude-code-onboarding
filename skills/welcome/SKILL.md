@@ -7,6 +7,19 @@ description: "Entry point dev onboardingu — router pro nového kolegu. Detekuj
 
 Jsem průvodce nastavením tvého dev prostředí. Povedu tě krok po kroku — vysvětlím **co** a **proč**, ne jen "spusť tohle".
 
+## Krok 0: Které hostingy tým používá
+
+**Zeptej se dřív, než pustíš detekci** (jedna otázka, ne domněnka):
+
+> *"Kde žijí repa, na kterých budeš pracovat — GitHub, GitLab, nebo oba?"*
+
+GitLab **není** default. Když ho tým nepoužívá, vynech GitLab řádky z detekce
+i z dashboardu úplně — jinak kolega uvidí `✗ GitLab SSH` a `✗ glab` a bude
+řešit neexistující problém. V `install-gh-glab` pak přeskoč sekci `glab`.
+
+Když odpověď neznáš (kolega si není jistý), testuj obojí, ale GitLab výsledek
+označ jako `— GitLab: nepoužíváš? přeskoč`, ne jako `✗`.
+
 ## Krok 1: Detekce prostředí
 
 Nejdřív zjistím **kde jsi** a **co už máš**. Spustím tyhle příkazy (každý uvidíš v permission dialogu — schval je):
@@ -19,6 +32,7 @@ echo "shell=$SHELL"
 
 # 2. SSH — funkční test (NE existenční — každý má klíče pojmenované jinak)
 ssh -T -o ConnectTimeout=5 -o StrictHostKeyChecking=no git@github.com 2>&1 | grep -qE "successfully authenticated|Hi .+!" && echo "✓ GitHub SSH OK" || echo "✗ GitHub SSH"
+# GitLab jen pri odpovedi z Kroku 0 — jinak tento radek vubec nespoustej
 ssh -T -o ConnectTimeout=5 -o StrictHostKeyChecking=no git@gitlab.com 2>&1 | grep -qE "Welcome to GitLab" && echo "✓ GitLab SSH OK" || echo "✗ GitLab SSH"
 
 # 3. Git config
@@ -27,6 +41,7 @@ git config --get pull.rebase 2>/dev/null | grep -q true && echo "✓ pull.rebase
 
 # 4. GitHub + GitLab CLI
 gh auth status 2>&1 | grep -q "Logged in" && echo "✓ gh OK" || echo "✗ gh"
+# glab taktez jen pri GitLabu
 glab auth status 2>&1 | grep -q "Logged in" && echo "✓ glab OK" || echo "✗ glab"
 
 # 5. Claude Code CLI binárka v terminálu (≠ VS Code extension!)
@@ -67,9 +82,9 @@ Pokud `uname -s` vrátilo `Linux` nebo `Darwin` (macOS), jedeme dál. Podle toho
 
 | Chybí | Další skill |
 |---|---|
-| ✗ GitHub/GitLab SSH | `setup-ssh` |
+| ✗ SSH (GitHub, případně GitLab) | `setup-ssh` |
 | ✗ git user.email / pull.rebase | `setup-git` |
-| ✗ gh / glab | `install-gh-glab` |
+| ✗ gh (`glab` jen při GitLabu) | `install-gh-glab` |
 | nikdy jsi nepoužil Claude Code | `claude-concepts` |
 | ✗ claude CLI missing | `install-claude-cli` (prerekvizita pro marketplace) |
 | patříš do firmy s vlastním marketplace | `install-marketplace` |
@@ -113,4 +128,4 @@ Dashboard ti řekne co ti chybí. Můžeš:
 
 ## Začneme
 
-Nejdřív spustím detekci. Schval permission dialogy — každý bash příkaz uvidíš před spuštěním. Nebo prostě napiš *"jsem úplný nováček, nemám nic"* a začnu od `install-wsl` (Windows) nebo `setup-ssh` (jinde).
+Nejdřív se zeptám na hostingy (Krok 0), pak spustím detekci. Schval permission dialogy — každý bash příkaz uvidíš před spuštěním. Nebo prostě napiš *"jsem úplný nováček, nemám nic"* a začnu od `install-wsl` (Windows) nebo `setup-ssh` (jinde).

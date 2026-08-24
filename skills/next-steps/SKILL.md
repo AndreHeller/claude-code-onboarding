@@ -49,6 +49,29 @@ cd <nazev-slozky>   # složka co git clone vytvořil (obvykle = název repa)
 
 ### 2. Otevři ve VS Code
 
+Nejdřív ověř, že `code` shim v PATH vůbec je — na čerstvém macOS typicky
+**není**, i když je VS Code nainstalovaný:
+
+```bash
+command -v code || echo "code shim chybi"
+```
+
+**Pokud chybí (macOS):** v VS Code `Cmd+Shift+P` → *Shell Command: Install
+'code' command in PATH*. To je oficiální cesta a shim se sám udržuje při
+aktualizacích. Ruční alternativa, když paletu použít nechceš:
+
+```bash
+export PATH="/Applications/Visual Studio Code.app/Contents/Resources/app/bin:$PATH"
+```
+
+(Trvale pak stejným řádkem do rc souboru svého shellu — viz `install-claude-cli`,
+Krok 2.)
+
+**Na WSL / Linuxu** shim přichází s integrací VS Code, takže tam obvykle jen
+ověříš, že odpovídá.
+
+Pak otevři workspace:
+
 ```bash
 code .
 ```

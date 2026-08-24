@@ -65,17 +65,51 @@ claude --version
 > [managed-dotfiles.md](../welcome/references/managed-dotfiles.md) — zápis do
 > cesty v home by upravil trackovaný soubor v config repu.
 
+Nejdřív zjisti, který rc soubor tvůj shell vůbec čte — zápis do špatného je
+nejčastější důvod, proč PATH fix „nezabral":
+
 ```bash
-echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
-source ~/.bashrc
+case "$SHELL" in
+  */zsh)  RC=~/.zshrc ;;
+  */bash) RC=~/.bashrc ;;
+  *)      RC=~/.profile ;;
+esac
+echo "shell=$SHELL -> $RC"
+```
+
+Na **macOS je default zsh**, na Ubuntu/WSL bash. Pak zapiš:
+
+```bash
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$RC"
+source "$RC"
 claude --version    # teď by mělo fungovat
 ```
 
 Co to udělalo:
-- `echo ... >> ~/.bashrc` — permanentně přidá PATH export do startup scriptu bashe (spustí se při každém novém terminálu).
-- `source ~/.bashrc` — načte změnu do **aktuálního** shellu (jinak bys musel zavřít a otevřít terminál).
+- `echo ... >> "$RC"` — permanentně přidá PATH export do startup scriptu tvého shellu (spustí se při každém novém terminálu).
+- `source "$RC"` — načte změnu do **aktuálního** shellu (jinak bys musel zavřít a otevřít terminál).
 
-**Pokud používáš zsh** (macOS default, nebo custom setup): zaměň `~/.bashrc` za `~/.zshrc`. Jinak je postup stejný.
+### Ověření musí běžet v interaktivním shellu
+
+`~/.zshrc` ani `~/.bashrc` se v **neinteraktivním** shellu nenačítá — zsh v něm
+čte jen `~/.zshenv`. Když ověřuješ přes nástroj, který příkazy spouští
+neinteraktivně, `claude --version` vrátí `command not found`, i když je PATH
+nastavený správně a v uživatelově terminálu funguje.
+
+Ověř tedy tak, jak to uvidí uživatel:
+
+```bash
+zsh -i -c 'which claude && claude --version'     # nebo bash -i -c '...'
+```
+
+Případně v rámci téhož příkazu obejdi rc soubor úplně:
+
+```bash
+export PATH="$HOME/.local/bin:$PATH"; claude --version
+```
+
+Nehlas „PATH je rozbitý" na základě neinteraktivního testu — ověř oběma
+způsoby, než něco takového řekneš.
 
 ## Krok 3: Verifikace
 
