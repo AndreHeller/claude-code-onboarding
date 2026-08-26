@@ -44,6 +44,44 @@ ssh-add ~/.ssh/id_ed25519
 ssh-add -l   # list klíčů v agent
 ```
 
+### `git` nebo `ssh` visí bez chyby (žádná hláška, jen ticho do timeoutu)
+
+`git fetch`, `git push` ani `ssh -T git@github.com` nic nevypíšou a nedoběhnou. Tohle **není** problém klíče, sítě ani VPN — a právě proto se hledá špatně: bez chybové hlášky člověk kontroluje klíč, firewall a VPN, tedy všechno kromě viníka.
+
+Viník je obvykle **zatuhlý ssh-agent**. Na macOS ho spravuje launchd a umí skončit ve stavu, kdy socket (`$SSH_AUTH_SOCK`, typicky `/var/run/com.apple.launchd.*/Listeners`) **existuje, ale nikdo za ním neodpovídá**. Když má host v `~/.ssh/config` řádek `AddKeysToAgent yes`, ssh se agenta zeptá jako první krok — a čeká.
+
+**Diagnostika — jeden příkaz rozhodne.** Spusť totéž s vyprázdněnou `SSH_AUTH_SOCK`, tedy s obejitým agentem:
+
+```bash
+SSH_AUTH_SOCK= ssh -o BatchMode=yes -T git@github.com
+```
+
+- **Projde** (*„Hi <jméno>! You've successfully authenticated"*) → klíč i síť jsou v pořádku, vinen je agent. Pokračuj fixem níž.
+- **Neprojde** → agent v tom není, jdi na `Permission denied` výš.
+
+Že visí agent, a ne spojení, potvrdíš i takto — oboje se zasekne, i když se GitHubu vůbec netýká:
+
+```bash
+ssh-add -l          # visí = agent neodpovídá
+nc -z -w 5 github.com 22   # succeeded = port 22 je průchodný, takže to není firewall
+```
+
+**Fix — u klíče bez passphrase agenta prostě nepoužívej.** V `~/.ssh/config` k dotčenému hostu:
+
+```
+Host github.com
+    HostName github.com
+    User git
+    IdentityFile ~/.ssh/github
+    IdentityAgent none
+```
+
+`IdentityAgent none` znamená „na agenta se neptej, vezmi klíč z disku". U nešifrovaného klíče tím nic neztratíš — agent ti žádné psaní passphrase neušetřil. Pak ověř, že to jede: `git ls-remote git@github.com:<org>/<repo>.git HEAD`.
+
+> `launchctl stop com.openssh.ssh-agent` **nepomůže** — launchd agenta vzkřísí do stejného stavu. Restart stroje agenta postaví znovu, ale `IdentityAgent none` je trvalé řešení.
+>
+> Máš-li klíč **s passphrase**, agenta chceš. Pak zbývá restart stroje, nebo přejít na klíč bez passphrase (`ssh-keygen -p -f ~/.ssh/github`).
+
 ### `Host key verification failed`
 
 Server změnil SSH host key (legitimní rotace, nebo možný MitM).
