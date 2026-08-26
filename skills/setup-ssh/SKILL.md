@@ -201,13 +201,11 @@ Host github.com
     HostName github.com
     User git
     IdentityFile ~/.ssh/github
-    AddKeysToAgent yes
 
 Host gitlab.com
     HostName gitlab.com
     User git
     IdentityFile ~/.ssh/gitlab
-    AddKeysToAgent yes
 EOF
 chmod 644 ~/.ssh/config
 ```
@@ -215,7 +213,9 @@ chmod 644 ~/.ssh/config
 Vysvětlení:
 - **`Host github.com`** — pattern match: když SSH vidí `git@github.com`, použije tuto sekci.
 - **`IdentityFile ~/.ssh/github`** — který privátní klíč nabídnout serveru.
-- **`AddKeysToAgent yes`** — automaticky přidá klíč do ssh-agent (nemusíš ručně `ssh-add`).
+- **Žádný `AddKeysToAgent`** — u klíče **bez passphrase** (což je doporučená cesta výš) ho SSH nepotřebuje: klíč si přečte přímo z disku. Kdybys passphrase nastavil, přidej si `AddKeysToAgent yes` k tomu hostu a klíč pak zadáš jen jednou za session (Část 7).
+
+  > ⚠ **Na macOS ten jeden řádek umí zaseknout git úplně.** Agenta tam spravuje launchd, a když zatuhne, socket v `/var/run/com.apple.launchd.*/Listeners` **existuje, ale nikdo za ním neodpovídá**. `AddKeysToAgent` přitom znamená „nejdřív se zeptej agenta", takže každé `git fetch` / `git push` čeká do timeoutu — a to **bez jediné chybové hlášky**, což je nejhorší druh poruchy: hledá se v klíči, v síti a ve VPN, tedy všude jinde než u agenta. Diagnostika a jednořádkový fix jsou v `troubleshoot`, symptom *„git nebo ssh visí bez chyby"*.
 - **`User git`** — GitHub/GitLab vždy používají user `git` (ne tvoje jméno).
 
 Po generaci by měl `~/.ssh/` vypadat takto:
@@ -327,7 +327,9 @@ Pokud máš klíč **bez passphrase** (jako teď), ssh-agent není nutný — SS
 
 Pokud jsi dal **passphrase**, bez ssh-agent bys psal heslo při každém `git clone`/`push`. S agent ho napíšeš jednou na startu session, pak ho SSH bere z paměti.
 
-Ubuntu má ssh-agent ready — spustíš:
+**Na macOS** agenta spravuje launchd a `SSH_AUTH_SOCK` je nastavená sama (míří do `/var/run/com.apple.launchd.*/Listeners`), takže `ssh-add ~/.ssh/github` stačí — ale platí to varování z Části 4: když ten agent zatuhne, visí na něm každé ssh volání, které se ho zkusí zeptat. Pokud klíč passphrase nemá, je čistší se agentu vyhnout úplně (`IdentityAgent none` u hostu v configu).
+
+**Na Ubuntu / WSL** je ssh-agent ready — spustíš:
 
 ```bash
 eval "$(ssh-agent -s)"       # spustí agent v aktuálním shellu
