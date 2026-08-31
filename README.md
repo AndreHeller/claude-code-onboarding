@@ -1,5 +1,19 @@
 # claude-code-onboarding
 
+> [!IMPORTANT]
+> **Tenhle plugin se dál neudržuje.** (Poslední vydaná verze: 1.2.1, srpen 2026.)
+>
+> Obsah přešel do interního katalogu skillů Slevomatu, kde se dál vyvíjí ve firemní
+> variantě — bez GitLabu, s SSH klíči rozdělenými podle firemního a osobního GitHub
+> účtu a s odkazy na interní marketplace. Ta verze je závislá na slevomatím prostředí,
+> takže se sem zpátky neslévá.
+>
+> **Kód tady zůstává funkční a použitelný.** Je to poslední obecná verze pluginu —
+> nikdo mu nebude přidávat opravy, ale ani nic neubírá. Když se ti hodí,
+> **forkni si ho** a uprav na konvence svého týmu; přesně na to byl psaný.
+>
+> Issues a pull requesty tu už nikdo nevyřídí.
+
 **Open-source** Claude Code plugin `dev-onboarding` pro dev týmy. Jeden plugin provede nového kolegu **kompletním** setupem — od Windows/WSL instalace přes SSH, git, CLI nástroje, Claude koncepty, volitelně firemní plugin marketplace, až po klonování prvního projektu.
 
 ## Komu je to určeno

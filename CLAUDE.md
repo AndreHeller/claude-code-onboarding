@@ -1,5 +1,9 @@
 # CLAUDE.md — Dev onboarding repo
 
+> **Repo se neudržuje.** Vývoj pokračuje v interním katalogu skillů Slevomatu;
+> tady zůstává poslední obecná verze (1.2.1). Neprováděj úpravy s očekáváním, že
+> se vydají — pokud tu někdo pracuje, je to fork nebo archeologie.
+
 Tento repo **JE** Claude Code plugin `dev-onboarding` (plugin manifest v [.claude-plugin/plugin.json](.claude-plugin/plugin.json), skills v [skills/](skills/)) pro nové kolegy. Současně slouží jako **marketplace shim** ([.claude-plugin/marketplace.json](.claude-plugin/marketplace.json)) pro individuální install. Primární distribuce je přes **firemní Claude Team marketplace** (admin org-wide, Cowork). Fallback cesty: lokální `claude plugin install` nebo copy-paste PROMPT.md v Claude Desktop.
 
 ## Jak Claude pozná, že má onboardit
@@ -33,7 +37,7 @@ Pořadí v routeru welcome:
 
 ## Distribuce
 
-- **Slevomat kolega (Team plan)**: admin nastavil plugin jako *Installed by default* v Team marketplace (GitHub sync z tohoto repa). Plugin je aktivní v Cowork/Code automaticky.
+- **Slevomat kolega (Team plan)**: ~~plugin je aktivní z Team marketplace~~ — od srpna 2026 už ne, obsah se přesunul do interního katalogu skillů a tenhle záznam byl z firemního katalogu odebrán.
 - **Jiná firma nebo individuál**: `claude plugin marketplace add https://github.com/AndreHeller/claude-code-onboarding.git` + `claude plugin install dev-onboarding`.
 - **Claude Desktop / žádný plugin marketplace**: copy-paste [PROMPT.md](PROMPT.md) do chatu (fallback, stahuje `install-wsl/SKILL.md` přes URL).
 
@@ -60,5 +64,5 @@ claude plugin install dev-onboarding
 **Per-repo specifika:**
 - **Non-Slevomat remote** (= `AndreHeller/claude-code-onboarding` na GitHub) → plugin BI hook `check-git.sh` **silent-pass** (= hook validuje jen Slevomat repos, hobby/open-source repa nechává být).
 - **Single owner** (André), self-merge OK, žádný hard reviewer requirement.
-- **PR workflow přes `gh pr create`** (= GitHub remote, ne `glab`). Pro Slevomat kolegy je viditelnost přes Slevomat Team marketplace (admin GitHub sync), pro externí přes manual marketplace install.
+- **PR workflow přes `gh pr create`** (= GitHub remote, ne `glab`). Distribuce už je jen manual marketplace install nebo fork; firemní katalog tenhle plugin nenabízí.
 - **Versioning:** Repo a plugin žijí v jednom (= plugin manifest je v rootu repa). Plugin má SemVer v [.claude-plugin/plugin.json](.claude-plugin/plugin.json). Release branch konvence (Slevomat marketplace): `release/v<major>` (= aktuálně `release/v1`).

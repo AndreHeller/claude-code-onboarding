@@ -37,7 +37,7 @@ Cíl: po dokončení mám funkční WSL + Ubuntu + Unix user + VS Code v WSL mod
 
 Kolega bude v Claude Code v WSL. Tam dál pokračuje instalací `dev-onboarding` pluginu:
 
-- **Slevomat kolega**: admin má plugin jako *Installed by default* v Team marketplace → plugin je už aktivní, stačí napsat "proveď mě onboardingem".
+- **Slevomat kolega**: tenhle plugin už firemní katalog nenabízí — jeho nástupce najdeš v interním katalogu skillů. Zeptej se kolegů, kde ho hledat.
 - **Ostatní / open-source**: nejdřív nainstaluj **`claude` CLI binárku** v Ubuntu terminálu (VS Code extension ji v terminálu nevystavuje):
 
   ```bash
